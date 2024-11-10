@@ -1,6 +1,6 @@
-<script>
-	export let left = 100;
-	export let top = 100;
+<script lang="ts">
+	export let vertice:{x:number, y:number};
+
 	
 	let moving = false;
 	
@@ -11,10 +11,10 @@
 	/**
      * @param {{ movementX: number; movementY: number; }} e
      */
-	function onMouseMove(e) {
+	function onMouseMove(e:{ movementX: number; movementY: number; }) {
 		if (moving) {
-			left += e.movementX;
-			top += e.movementY;
+			vertice.x += e.movementX;
+			vertice.y += e.movementY;
 		}
 	}
 	
@@ -42,8 +42,8 @@
 
 </style>
 
-<section on:mousedown={onMouseDown} style="left: {left}px; top: {top}px;" class="draggable">
-	<slot></slot>
-</section>
+
+<div on:mousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="draggable" />
+
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />

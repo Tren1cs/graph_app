@@ -1,20 +1,24 @@
 <script lang="ts">
     import Draggable from "./draggable.svelte";
     import DraggableTxt from "./draggableTxt.svelte";
-    enum Direction
-    {
-        up = 1, down = -1
-    }
 
-    
-    let name:string = "asd"
+    let vertices:{x:number, y:number}[];
+    let name:string = "asd";
+    let n:number = 3;
+    function generateVertices()
+    {
+        vertices = [];
+        for (let i = 0; i < n; i++)
+        {
+            vertices.push({x: i * 300, y: i * 300});
+        }
+    }
     
 </script>
 
-<Draggable>
-    <DraggableTxt>
-    </DraggableTxt>
-</Draggable>
-
-<h1>Welcome to {name}, {Direction.up}</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">docs</a> to read the documentation</p>
+<div>
+    {#each vertices as vertice, i}
+        <Draggable {vertice}/>
+    {/each}
+    <button on:click={generateVertices}>create graph</button>
+</div>
