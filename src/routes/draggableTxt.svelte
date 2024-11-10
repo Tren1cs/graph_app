@@ -4,7 +4,7 @@
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         text-align: center;
         position: relative;
-        top: -10px;
+        top: 6px;
         left: 0px;
         
     }
