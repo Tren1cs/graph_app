@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let vertice:{x:number, y:number};
+	export let vertice:{x:number, y:number, value:number};
 
 	
 	let moving = false;
@@ -39,11 +39,21 @@
         -webkit-border-radius:50%;
 		position: absolute;
 	}
+	h1{
+		color: rgb(222, 222, 222);
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        text-align: center;
+        position: relative;
+        top: 7px;
+        left: 0px;
+	}
 
 </style>
 
 
-<div on:mousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="draggable" />
-
-
+<div on:mousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="draggable">
+	<h1>
+		{vertice.value}
+	</h1>
+</div>
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
