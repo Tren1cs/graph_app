@@ -16,9 +16,9 @@
 
 <div class=" bg-black h-screen w-screen m-0 text-white">
     <GraphView />
-    <div class=" h-full w-full z-10 m-0 p-8 absolute">
-        <div class=" bg-zinc-900 rounded-xl w-full h-14"></div>
-        <div class="bg-zinc-950 rounded-xl w-fit h-fit p-5 mt-5">
+    <div class=" h-full w-full z-0 m-0 p-8 absolute">
+        <div class=" bg-zinc-900 z-50 rounded-xl w-full h-14"></div>
+        <div class="bg-zinc-950 z-50 rounded-xl w-fit h-fit p-5 mt-5">
             <h1 class="text-xl mb-3">{settings.GraphName}</h1>
             <div class="bg-zinc-900 my-3 p-4 rounded-lg w-96">
                 <h2 class="text-lg">View options</h2>

@@ -13,7 +13,7 @@
     }
 </script>
 
-<div class=" bg-transparent h-full w-full text-white top-0 left-0 text-center content-center z-0 absolute m-0">
+<div class=" bg-transparent h-full w-full text-white top-0 left-0 text-center content-center z-10 absolute m-0">
     {#each vertices as vertice, i}
         <Draggable {vertice}/>
     {/each}
