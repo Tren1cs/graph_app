@@ -1,7 +1,9 @@
 <script lang="ts">
-	export let vertice:{id:string, x:number, y:number};
-
-	
+	interface Props
+	{
+		vertice:{id:string, x:number, y:number}
+	}
+	let {vertice}:Props = $props();
 	let moving = false;
 	
 	function onMouseDown() {
@@ -50,7 +52,7 @@
 </style>
 
 
-<div on:mousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="draggable">
+<div on:mousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
 	<h1>
 		{vertice.id}
 	</h1>
