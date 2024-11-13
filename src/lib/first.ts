@@ -33,7 +33,7 @@ function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [
 }
 
 
-function get_vertex_positions(rebrs: Array<Array<string>>){
+export function get_vertex_positions(rebrs: Array<Array<string>>){
 
     //*константы
 
@@ -83,13 +83,11 @@ function get_vertex_positions(rebrs: Array<Array<string>>){
     
     //! бог есть, возвращаю координаты (ключ: имя вершины; значание - Array из двух значений (x и y)), 
     //* { [id: string]: Array<number> }
-
-    return vertex_pos;
+    let convertedVertexPos:{id:string, x:number, y:number}[] = [];
+    for(let vertex in vertex_pos){
+        convertedVertexPos.push({id: vertex, x: vertex_pos[vertex][0], y: vertex_pos[vertex][1]});
+        console.log(convertedVertexPos);
+    }
+    
+    return convertedVertexPos;
 }
-
-let rebrs = [
-    ['A', 'B'],
-    ['A', 'C'],
-    ['B', 'D'],
-]
-get_vertex_positions(rebrs);

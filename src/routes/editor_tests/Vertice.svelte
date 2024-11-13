@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let vertice:{x:number, y:number, value:number};
+	export let vertice:{id:string, x:number, y:number};
 
 	
 	let moving = false;
@@ -26,8 +26,7 @@
 </script>
 
 <style>
-	.draggable {
-        
+	.Vertice {
         background-color: rgb(23, 23, 23);
 		user-select: none;
 		cursor: move;
@@ -53,7 +52,7 @@
 
 <div on:mousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="draggable">
 	<h1>
-		{vertice.value}
+		{vertice.id}
 	</h1>
 </div>
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />

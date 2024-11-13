@@ -1,14 +1,20 @@
 <script lang="ts">
-    import Draggable from "./draggable.svelte";
-    import DraggableTxt from "./draggableTxt.svelte";
-    let vertices:{x:number, y:number, value:number}[];
+    import Draggable from "./Vertice.svelte";
+    import {get_vertex_positions} from "$lib/first";
+    import { stringify } from "postcss";
+    let vertices:{id:string, x:number, y:number}[];
     let n:number = 3;
-    function generateVertices()
+    let edgesArray:string[][] = [
+        ['1', '2'],
+        ['1', '3'],
+        ['2', '4'],
+    ]
+    export function generateVertices()
     {
-        vertices = [];
+        vertices = get_vertex_positions(edgesArray);
         for (let i = 0; i < n; i++)
         {
-            vertices.push({x: i * 300, y: i * 300, value:i + 1});
+            vertices.push({id:(i + 1).toString(), x: i * 3, y: i * 3});
         }
     }
 </script>
