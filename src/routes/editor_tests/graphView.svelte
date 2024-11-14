@@ -3,7 +3,7 @@
     import DraggableTxt from "./draggableTxt.svelte";
     let vertices:{x:number, y:number, value:number}[];
     let n:number = 3;
-    export function generateVertices()
+    function generateVertices()
     {
         vertices = [];
         for (let i = 0; i < n; i++)
