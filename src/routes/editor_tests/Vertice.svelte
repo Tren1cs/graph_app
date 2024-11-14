@@ -1,9 +1,10 @@
 <script lang="ts">
 	interface Props
 	{
-		vertice:{id:string, x:number, y:number}
+		verticeProps:{id:string, x:number, y:number};
 	}
-	let {vertice}:Props = $props();
+	let {verticeProps}:Props = $props();
+	let vertice:{id:string, x:number, y:number} = $state(verticeProps);
 	let moving = false;
 	
 	function onMouseDown() {
@@ -52,7 +53,7 @@
 </style>
 
 
-<div on:mousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
+<div onmousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
 	<h1>
 		{vertice.id}
 	</h1>
