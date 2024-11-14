@@ -10,6 +10,8 @@
 
     import { Textarea } from "$lib/components/ui/textarea/index.js";
 
+    let { input = $bindable(""), ...props } = $props();
+
 </script>
 
 <Dialog.Root>
@@ -38,9 +40,16 @@
                             Import graph
                         </Dialog.Close>
                     </Tabs.Content>
-
+                        
                     <Tabs.Content value="list">
-                        🚧 UNDER CONSTRUCTION 🚧
+                        <Textarea placeholder="Paste your code here" class="mb-2" bind:value={input}/>
+                        <Dialog.Close on:click class="w-full ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center
+                            whitespace-nowrap rounded-md text-sm font-medium transition-colors
+                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
+                            disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90
+                            h-10 px-4 py-2">
+                            Import graph
+                        </Dialog.Close>
                     </Tabs.Content>
 
                     <Tabs.Content value="matrix">

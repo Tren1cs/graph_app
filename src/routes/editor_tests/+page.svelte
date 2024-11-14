@@ -4,6 +4,7 @@
     import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Button from "$lib/components/ui/button/button.svelte";
     import generateVertices from "./graphView.svelte"
+    import importFromAdjList from "./graphView.svelte"
     import { ArrowDownToLine } from 'lucide-svelte';
     import { ArrowUpFromLine } from "lucide-svelte";
     import * as Resizable from "$lib/components/ui/resizable";
@@ -18,6 +19,8 @@
         }
     });
     let graphView;
+
+    let graphTextInput = $state("");
 </script>
 
 <div class=" bg-background h-screen w-screen m-0 text-white">
@@ -28,7 +31,7 @@
             </div>
 
             <div class="align-middle flex justify-end">
-                <ImportMenu></ImportMenu>
+                <ImportMenu on:click={() => graphView.importFromAdjList(graphTextInput)} bind:input={graphTextInput}></ImportMenu>
                 <Button variant="secondary" class=""><ArrowUpFromLine class="mr-2 h-4 w-4" />Export</Button>
             </div>
         </div>

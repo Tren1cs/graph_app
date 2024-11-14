@@ -3,13 +3,16 @@
     import DraggableTxt from "./draggableTxt.svelte";
     let vertices:{x:number, y:number, value:number}[];
     let n:number = 3;
-    function generateVertices()
+    export function generateVertices()
     {
         vertices = [];
         for (let i = 0; i < n; i++)
         {
             vertices.push({x: i * 300, y: i * 300, value:i + 1});
         }
+    }
+    export function importFromAdjList(input: string) {
+        console.log(input)
     }
 </script>
 
