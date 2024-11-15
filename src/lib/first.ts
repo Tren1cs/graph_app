@@ -5,7 +5,7 @@ function find(mas: Array<string>, key: string){
     return false;
 }
 
-function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [id: string]: Array<number> }, rebr_power: number, vertex_power: number, move_distance: number){
+function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [id: string]: Array<number> }, rebr_power: number, vertex_power: number, move_distance: number, rebr_distance: number){
     for(let vertex in graph){
         let move_x: number = 0, move_y: number = 0;
         for(let other_vertex in graph){
@@ -13,14 +13,14 @@ function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [
             distance = Math.sqrt(Math.pow(vertex_pos[vertex][0] - vertex_pos[other_vertex][0], 2) + Math.pow(vertex_pos[other_vertex][1] - vertex_pos[vertex][1], 2));
             distance_x = vertex_pos[other_vertex][0] - vertex_pos[vertex][0];
             distance_y = vertex_pos[other_vertex][1] - vertex_pos[vertex][1];
-            if(vertex != other_vertex && find(graph[vertex], other_vertex)){
+            if(vertex != other_vertex && find(graph[vertex], other_vertex) && distance > rebr_distance){
                 let conection_power: number;
                 conection_power = Math.pow(distance, rebr_power);
                 move_x += distance_x * conection_power * move_distance;
                 move_y += distance_y * conection_power * move_distance;
             }
             let repulsion_power: number;
-            if(vertex != other_vertex){
+            if(vertex != other_vertex && distance < rebr_distance){
                 repulsion_power = vertex_power / distance;
                 move_x -= distance_x * repulsion_power * move_distance;
                 move_y -= distance_y * repulsion_power * move_distance;
@@ -32,17 +32,17 @@ function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [
     return vertex_pos;
 }
 
-
 export function get_vertex_positions(rebrs: Array<Array<string>>){
 
     //*константы
 
     const iteration_times: number = 50000;   //? количество итераций
     const rebr_power: number = 1.1;            //? сила притяжения между вершинами ребра (distance ^ rebr_power)
-    const vertex_power: number = 50000;         //? сила отталкивания между двумя вершинами (vertex_power / distance)
+    const vertex_power: number = 5000000;         //? сила отталкивания между двумя вершинами (vertex_power / distance)
     const move_distance: number = 0.0000001;   //? сила одного шага (... * move_distance)
     const min_start_pos_range: number = 500;     //? минимальная стартовая координата вершины
-    const max_start_pos_range: number = 900;  //? максимальная стартовая координата вершины
+    const max_start_pos_range: number = 1000;  //? максимальная стартовая координата вершины
+    const rebr_distance = 230;                 //? дистанция между рёбрами
 
     //* конвертация входных данных
 
@@ -76,7 +76,7 @@ export function get_vertex_positions(rebrs: Array<Array<string>>){
     //! ну тут ещё был, дальше его точно нет, ведь теперь ИЗМЕНЕНИЕ РАСПОЛОЖЕНИЯ
 
     for(let i = 0; i < iteration_times; i++){
-        vertex_pos = graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance);
+        vertex_pos = graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance, rebr_distance);
     }
     console.log(vertex_pos);
 

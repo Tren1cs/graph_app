@@ -1,10 +1,6 @@
 <script lang="ts">
-	interface Props
-	{
-		verticeProps:{id:string, x:number, y:number};
-	}
-	let {verticeProps}:Props = $props();
-	let vertice:{id:string, x:number, y:number} = $state(verticeProps);
+	export let vertice:{id:string, x:number, y:number};
+	
 	let moving = false;
 	
 	function onMouseDown() {

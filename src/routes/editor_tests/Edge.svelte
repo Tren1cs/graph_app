@@ -1,3 +1,8 @@
+<script lang="ts">
+    export let edge:{x1:number, y1:number, x2:number, y2:number};
+</script>
+
+
 <style>
     .Edge
     {
@@ -14,4 +19,5 @@
 </style>
 
 <div class="Edge">
+
 </div>
