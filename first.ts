@@ -5,7 +5,7 @@ function find(mas: Array<string>, key: string){
     return false;
 }
 
-function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [id: string]: Array<number> }, rebr_power: number, vertex_power: number, move_distance: number, rebr_distance: number){
+function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [id: string]: Array<number> }, rebr_power: number, vertex_power: number, move_distance: number, rebr_distance: number, min_x: number, max_x: number, min_y: number, max_y: number, central_full: number){
     for(let vertex in graph){
         let move_x: number = 0, move_y: number = 0;
         for(let other_vertex in graph){
@@ -28,6 +28,17 @@ function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [
         }
         vertex_pos[vertex][0] += move_x;
         vertex_pos[vertex][1] += move_y;
+        if(vertex_pos[vertex][0] > (max_x + min_x) / 2){
+            vertex_pos[vertex][0] -= central_full / (max_x - vertex_pos[vertex][0]) * move_distance;
+        }else{
+            vertex_pos[vertex][0] += central_full / (vertex_pos[vertex][0] - min_x) * move_distance;
+        }
+        if(vertex_pos[vertex][1] > (max_y + min_y) / 2){
+            vertex_pos[vertex][1] -= central_full / (max_y - vertex_pos[vertex][1]) * move_distance;
+        }else{
+            vertex_pos[vertex][1] += central_full / (vertex_pos[vertex][1] - min_y) * move_distance;
+        }
+
     }
     return vertex_pos;
 }
@@ -37,13 +48,16 @@ function get_vertex_positions(rebrs: Array<Array<string>>){
 
     //*константы
 
-    const iteration_times: number = 1000000;   //? количество итераций
-    const rebr_power: number = 1.1;            //? сила притяжения между вершинами ребра (distance ^ rebr_power)
-    const vertex_power: number = 1000;         //? сила отталкивания между двумя вершинами (vertex_power / distance)
-    const move_distance: number = 0.0000001;   //? сила одного шага (... * move_distance)
-    const min_start_pos_range: number = 0;     //? минимальная стартовая координата вершины
-    const max_start_pos_range: number = 1000;  //? максимальная стартовая координата вершины
-    const rebr_distance = 100;                 //? дистанция между рёбрами
+    const iteration_times: number = 1000000;     //? количество итераций
+    const rebr_power: number = 1.1;              //? сила притяжения между вершинами ребра (distance ^ rebr_power)
+    const vertex_power: number = 1000;           //? сила отталкивания между двумя вершинами (vertex_power / distance)
+    const move_distance: number = 0.0000001;     //? сила одного шага (... * move_distance)
+    const min_start_pos_range_x: number = 0;     //? минимальная стартовая координата вершины по x
+    const max_start_pos_range_x: number = 1000;  //? максимальная стартовая координата вершины по x
+    const min_start_pos_range_y: number = 0;     //? минимальная стартовая координата вершины по y
+    const max_start_pos_range_y: number = 1000;  //? максимальная стартовая координата вершины по y
+    const rebr_distance = 100;                   //? дистанция между рёбрами
+    const central_full: number = 1000;           //? то, на скалько далеко находятся вершины от границ
 
     //* конвертация входных данных
 
@@ -68,7 +82,7 @@ function get_vertex_positions(rebrs: Array<Array<string>>){
     
     let vertex_pos: { [id: string]: Array<number> } = {};
     for(let vertex in graph) {
-        vertex_pos[vertex] = [randomIntFromInterval(min_start_pos_range, max_start_pos_range), randomIntFromInterval(min_start_pos_range, max_start_pos_range)];
+        vertex_pos[vertex] = [randomIntFromInterval(min_start_pos_range_x, max_start_pos_range_x), randomIntFromInterval(min_start_pos_range_y, max_start_pos_range_y)];
     }
     console.log(vertex_pos);
 
@@ -77,7 +91,7 @@ function get_vertex_positions(rebrs: Array<Array<string>>){
     //! ну тут ещё был, дальше его точно нет, ведь теперь ИЗМЕНЕНИЕ РАСПОЛОЖЕНИЯ
 
     for(let i = 0; i < iteration_times; i++){
-        vertex_pos = graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance, rebr_distance);
+        vertex_pos = graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance, rebr_distance, min_start_pos_range_x, max_start_pos_range_x, min_start_pos_range_y, max_start_pos_range_y, central_full);
     }
     console.log(vertex_pos);
 
