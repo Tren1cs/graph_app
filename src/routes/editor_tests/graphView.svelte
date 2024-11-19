@@ -16,6 +16,7 @@
     export function generateGraph()
     {
         vertices = get_vertex_positions(inputEdges);
+        let localEdges:{x1:number, y1:number, x2:number, y2:number}[] = [];
         for (let i = 0; i < inputEdges.length; i++)
         {
             let firstVertice = vertices.find(v => v.id === inputEdges[i][0]);
@@ -24,8 +25,10 @@
             {
                 throw new TypeError('The value was promised to always be there!');
             }
-            edges.push({x1: firstVertice.x, y1: firstVertice.y, x2: secondVertice.x, y2: secondVertice.y});
+            localEdges.push({x1: firstVertice.x, y1: firstVertice.y, x2: secondVertice.x, y2: secondVertice.y});
         }
+        edges = localEdges;
+        console.log(edges);
     }
     
 </script>
@@ -35,9 +38,9 @@
         <Vertice bind:vertice = {el} />
     {/each}
 
-    <!----{#each edges as el}
+    {#each edges as el}  
         <Edge bind:edge = {el} />
-    {/each}</!---->
+    {/each}
     <button on:click={generateGraph}>create graph</button>
     *This component is supposed to be graph view*
 </div>
