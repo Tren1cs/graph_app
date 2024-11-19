@@ -1,6 +1,5 @@
 <script lang="ts">
 	export let vertice:{id:string, x:number, y:number};
-	
 	let moving = false;
 	
 	function onMouseDown() {
@@ -36,6 +35,7 @@
         -moz-border-radius:50%;
         -webkit-border-radius:50%;
 		position: absolute;
+		z-index: 2;
 	}
 	h1{
 		color: rgb(222, 222, 222);

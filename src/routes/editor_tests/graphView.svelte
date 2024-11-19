@@ -34,11 +34,11 @@
 </script>
 
 <div class=" bg-transparent h-full w-full text-white top-0 left-0 text-center content-center z-10 absolute m-0">
-    {#each vertices as el}
+    {#each vertices as el, i (i)}
         <Vertice bind:vertice = {el} />
     {/each}
 
-    {#each edges as el}  
+    {#each edges as el, i (i)}  
         <Edge bind:edge = {el} />
     {/each}
     <button on:click={generateGraph}>create graph</button>

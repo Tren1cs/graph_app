@@ -46,16 +46,13 @@ export function get_vertex_positions(rebrs: Array<Array<string>>){
 
     //* конвертация входных данных
 
-    console.log(rebrs);
     let graph: { [id: string] : Array<string>} = {};                              
     rebrs.forEach(function (rebro) {
-        console.log(rebro);
         if(!graph[rebro[0]]) graph[rebro[0]] = [];   
         if(!graph[rebro[1]]) graph[rebro[1]] = [];              
         graph[rebro[0]].push(rebro[1]);
         graph[rebro[1]].push(rebro[0]);
     });
-    console.log(graph);
 
 
 
@@ -69,7 +66,6 @@ export function get_vertex_positions(rebrs: Array<Array<string>>){
     for(let vertex in graph) {
         vertex_pos[vertex] = [randomIntFromInterval(min_start_pos_range, max_start_pos_range), randomIntFromInterval(min_start_pos_range, max_start_pos_range)];
     }
-    console.log(vertex_pos);
 
 
 
@@ -78,7 +74,6 @@ export function get_vertex_positions(rebrs: Array<Array<string>>){
     for(let i = 0; i < iteration_times; i++){
         vertex_pos = graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance, rebr_distance);
     }
-    console.log(vertex_pos);
 
     
     //! бог есть, возвращаю координаты (ключ: имя вершины; значание - Array из двух значений (x и y)), 
@@ -86,7 +81,6 @@ export function get_vertex_positions(rebrs: Array<Array<string>>){
     let convertedVertexPos:{id:string, x:number, y:number}[] = [];
     for(let vertex in vertex_pos){
         convertedVertexPos.push({id: vertex, x: vertex_pos[vertex][0], y: vertex_pos[vertex][1]});
-        console.log(convertedVertexPos);
     }
     
     return convertedVertexPos;
