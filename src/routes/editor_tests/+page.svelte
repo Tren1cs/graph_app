@@ -39,8 +39,8 @@
         <div class="h-full w-screen m-0 p-0 ">
             <Resizable.PaneGroup direction="horizontal">
                 <Resizable.Pane defaultSize={20} minSize={12} maxSize={40} class="bg-background z-50">
-                    <h1>{settings.GraphName}</h1>
-                    <Button variant="default" on:click={graphView.generateVertices()}>Spawn Vertices</Button>
+                    <h1 class="text-xl m-4">{settings.GraphName}</h1>
+                    <Button class="m-4 mt-0" variant="default" on:click={graphView.generateVertices()}>Spawn Vertices</Button>
                 </Resizable.Pane>
                 <Resizable.Handle class="z-50" />
                 <Resizable.Pane class="z-0">
