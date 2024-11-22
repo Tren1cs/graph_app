@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let vertice:{id:string, x:number, y:number};
+	let {vertice = $bindable()} = $props();
 	let moving = false;
 	
 	function onMouseDown() {

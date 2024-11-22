@@ -1,8 +1,8 @@
 <script lang="ts">
-    export let edge:{x1:number, y1:number, x2:number, y2:number};
+    let {edge = $bindable()} = $props();
     const gap:number = 27;
-    $: length = ((edge.y2 - edge.y1) ** 2 + (edge.x2 - edge.x1) ** 2) ** 0.5;
-    $: angle = Math.atan2(edge.y2 - edge.y1, edge.x2 - edge.x1);
+    let length = $derived(((edge.y2 - edge.y1) ** 2 + (edge.x2 - edge.x1) ** 2) ** 0.5);
+    let angle = $derived(Math.atan2(edge.y2 - edge.y1, edge.x2 - edge.x1));
 
     //
 </script>
