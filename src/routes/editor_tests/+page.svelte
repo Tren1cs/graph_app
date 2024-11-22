@@ -18,7 +18,7 @@
             directed: false
         }
     });
-    let graphView;
+    let graphView = $state();
 
     let graphTextInput = $state("");
 </script>
