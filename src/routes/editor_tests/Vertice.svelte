@@ -1,7 +1,5 @@
 <script lang="ts">
-	export let vertice:{x:number, y:number, value:number};
-
-	
+	let {vertice = $bindable()} = $props();
 	let moving = false;
 	
 	function onMouseDown() {
@@ -26,34 +24,35 @@
 </script>
 
 <style>
-	.draggable {
-        
+	.Vertice {
         background-color: rgb(23, 23, 23);
 		user-select: none;
 		cursor: move;
-		border: solid 7px rgb(49, 49, 49);
+		border: solid 6px rgb(49, 49, 49);
         border-radius: 50%;
-        height:50px;
-        width:50px;
+        height:60px;
+        width:60px;
         -moz-border-radius:50%;
         -webkit-border-radius:50%;
 		position: absolute;
+		z-index: 2;
 	}
 	h1{
 		color: rgb(222, 222, 222);
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         text-align: center;
         position: relative;
-        top: 7px;
+        top: 10px;
         left: 0px;
+		font-size: 20px;
 	}
 
 </style>
 
 
-<div on:mousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="draggable">
+<div onmousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
 	<h1>
-		{vertice.value}
+		{vertice.id}
 	</h1>
 </div>
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
