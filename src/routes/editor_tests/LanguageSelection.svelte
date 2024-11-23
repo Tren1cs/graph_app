@@ -76,7 +76,7 @@
         </Popover.Trigger>
         <Popover.Content class="w-[462px] p-0" side="bottom" align="start">
             <Command.Root>
-                <Command.Input placeholder="Change status..." />
+                <Command.Input placeholder="Search languages..." />
                 <Command.List>
                     <Command.Empty>No results found.</Command.Empty>
                     <Command.Group>
