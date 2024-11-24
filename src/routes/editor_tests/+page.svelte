@@ -1,11 +1,11 @@
 <script lang="ts">
     import ImportMenu from './ImportMenu.svelte';
+    import ExportMenu from './ExportMenu.svelte';
     import GraphView from "./graphView.svelte";
     import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Button from "$lib/components/ui/button/button.svelte";
     import { ArrowUpFromLine } from "lucide-svelte";
     import * as Resizable from "$lib/components/ui/resizable";
-    import Input from '$lib/components/ui/input/input.svelte';
     import { toast } from 'svelte-sonner';
     import { Toaster } from '$lib/components/ui/sonner';
 
@@ -22,10 +22,20 @@
 
     let graphTextInput = $state("");
     let graphTextInputType = $state("");
+    let graphTextLang = $state("");
 
     function InvalidFormatToast() {
         toast.error("Invalid format!", {
             description: "Please, use the correct import format",
+            action: {
+                label: "Ok",
+                onClick: () => {}
+            }
+        })
+    }
+    function InvalidCodeToast() {
+        toast.error("Invalid code!", {
+            description: "You've chosen incorrect language or the code contains errors",
             action: {
                 label: "Ok",
                 onClick: () => {}
@@ -43,8 +53,8 @@
             </div>
 
             <div class="align-middle flex justify-end">
-                <ImportMenu on:click={() => graphView.importGraph(graphTextInput, graphTextInputType)} bind:input={graphTextInput} bind:input_type={graphTextInputType}></ImportMenu>
-                <Button variant="secondary" class=""><ArrowUpFromLine class="mr-2 h-4 w-4" />Export</Button>
+                <ImportMenu on:click={() => graphView.importGraph(graphTextInput, graphTextInputType)} bind:input={graphTextInput} bind:input_type={graphTextInputType} bind:lang={graphTextLang}></ImportMenu>
+                <ExportMenu />
             </div>
         </div>
 
@@ -53,10 +63,11 @@
                 <Resizable.Pane defaultSize={20} minSize={12} maxSize={40} class="bg-background z-50 p-4">
                     <input class="mb-4 border-none text-xl bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-fit w-full rounded-md border p-0 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" bind:value={settings.GraphName} placeholder="Graph name"/>
                     <Button class="" variant="default" on:click={graphView.generateGraph}>Spawn Vertices</Button>
+                    <Button onclick={InvalidCodeToast}>asdasd</Button>
                 </Resizable.Pane>
                 <Resizable.Handle class="z-50" />
                 <Resizable.Pane class="z-0">
-                    <GraphView bind:this={graphView} oninvalidformat={InvalidFormatToast}/>
+                    <GraphView bind:this={graphView} oninvalidformat={InvalidFormatToast} oninvalidcode={InvalidCodeToast}/>
                 </Resizable.Pane>
             </Resizable.PaneGroup>
         </div>

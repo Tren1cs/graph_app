@@ -4,57 +4,70 @@
     import { buttonVariants } from "$lib/components/ui/button/index.js";
 
     import Button from "$lib/components/ui/button/button.svelte";
-    import { ArrowDownToLine } from 'lucide-svelte';
+    import { ArrowUpFromLine } from 'lucide-svelte';
     import * as Dialog from "$lib/components/ui/dialog";
     import * as Tabs from "$lib/components/ui/tabs";
+    import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 
     import { Textarea } from "$lib/components/ui/textarea/index.js";
 
-    let { input = $bindable(""), input_type = $bindable(""), ...props } = $props();
+    import hljs from 'highlight.js';
 
+    let { adjlist = "", adjmatrix = "", ...props } = $props();
+
+    let exportType = "";
+
+
+    // Сделайте здесь экспорт в код, пожалуйста, в этом компоненте
+    function generateCode(language: string ) {
+        if(language === "") {
+            return "Select language";
+        }
+
+        let code = "print('Hello World')";
+
+        console.log(language)
+
+        return hljs.highlight(code, {language: language, ignoreIllegals: true}).value;
+    }
+
+
+    let lang = $state("");
 
 </script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark-reasonable.css">
 <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "secondary" }) + " mr-2"}><ArrowDownToLine class="mr-2 h-4 w-4" />Import</Dialog.Trigger>
+    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><ArrowUpFromLine class="mr-2 h-4 w-4"/>Export</Dialog.Trigger>
     <Dialog.Content>
         <Dialog.Header>
-            <Dialog.Title class="mb-4">Import Graph</Dialog.Title>
+            <Dialog.Title class="mb-4">Export Graph</Dialog.Title>
 
             <Dialog.Description>
-                <Tabs.Root value="code" class="w-full">
+                <Tabs.Root value="code" class="w-full min-h-[220px]">
                     <Tabs.List class="w-full">
-                        <Tabs.Trigger value="code" class="w-full">To code</Tabs.Trigger>
-                        <Tabs.Trigger value="list" class="w-full">To adjacency list</Tabs.Trigger>
-                        <Tabs.Trigger value="matrix" class="w-full">To adjacency matrix</Tabs.Trigger>
+                        <Tabs.Trigger value="code" class="w-full" onfocus={() => exportType = "code"}>To code</Tabs.Trigger>
+                        <Tabs.Trigger value="list" class="w-full" onfocus={() => exportType = "list"}>To adjacency list</Tabs.Trigger>
+                        <Tabs.Trigger value="matrix" class="w-full" onfocus={() => exportType = "matrix"}>To adjacency matrix</Tabs.Trigger>
                     </Tabs.List>
 
                     <Tabs.Content value="code">
-                        <LanguageSelection />
-                        <Textarea placeholder="Paste your code here" class="mb-2"/>
-
-                        <Dialog.Close class="w-full ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center
-                            whitespace-nowrap rounded-md text-sm font-medium transition-colors
-                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
-                            disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90
-                            h-10 px-4 py-2">
-                            Import graph
-                        </Dialog.Close>
+                        <LanguageSelection bind:value={lang}/>
+                        <ScrollArea class="w-full h-[164px] border-secondary border rounded-md p-3">
+                            {@html generateCode(lang)}
+                        </ScrollArea>
                     </Tabs.Content>
-                        
+
                     <Tabs.Content value="list">
-                        <Textarea placeholder="Paste your code here" class="mb-2" bind:value={input}/>
-                        <Dialog.Close on:click class="w-full ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center
-                            whitespace-nowrap rounded-md text-sm font-medium transition-colors
-                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
-                            disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90
-                            h-10 px-4 py-2">
-                            Import graph
-                        </Dialog.Close>
+                        <ScrollArea class="w-full h-[212px] border-secondary border rounded-md p-3">
+                            {adjlist}
+                        </ScrollArea>
                     </Tabs.Content>
 
                     <Tabs.Content value="matrix">
-                        🚧 UNDER CONSTRUCTION 🚧
+                        <ScrollArea class="w-full h-[212px] border-secondary border rounded-md p-3">
+                            {adjmatrix}
+                        </ScrollArea>
                     </Tabs.Content>
                 </Tabs.Root>
             </Dialog.Description>

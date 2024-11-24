@@ -6,6 +6,8 @@
     import * as Popover from "$lib/components/ui/popover/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import { cn } from "$lib/utils.js";
+    import * as Select from "$lib/components/ui/select";
+    import { Item } from "$lib/components/ui/carousel";
 
     type Lang = {
         value: string;
@@ -41,10 +43,13 @@
       }
     ];
  
-    let open = false;
-    let value = "";
+    let open = $state(false);
+
+    let { value = $bindable(""), onSelectedChange = () => {} } = $props()
+
+    $inspect(value);
  
-    $: selectedLang = langs.find((s) => s.value === value) ?? null;
+    let selectedLang = $state(langs.find((s) => s.value === value) ?? undefined);
  
     // We want to refocus the trigger button when the user selects
     // an item from the list so users can continue navigating the
@@ -56,47 +61,20 @@
         });
     }
 </script>
- 
-<div class="flex items-center">
-    <Popover.Root bind:open let:ids>
-        <Popover.Trigger asChild let:builder>
-            <Button
-                builders={[builder]}
-                variant="outline"
-                size="sm"
-                class="w-full mb-2 justify-start"
-            >
-                {#if selectedLang}
-                    {@html selectedLang.icon}
-                    {selectedLang.label}
-                {:else}
-                    Select language...
-                {/if}
-            </Button>
-        </Popover.Trigger>
-        <Popover.Content class="w-[462px] p-0" side="bottom" align="start">
-            <Command.Root>
-                <Command.Input placeholder="Search languages..." />
-                <Command.List>
-                    <Command.Empty>No results found.</Command.Empty>
-                    <Command.Group>
-                        {#each langs as lang}
-                            <Command.Item
-                                value={lang.value}
-                                onSelect={(currentValue) => {
-                                    value = currentValue;
-                                    closeAndFocusTrigger(ids.trigger);
-                                }}
-                            >
-                                {@html lang.icon}
-                                <span>
-                                    {lang.label}
-                                </span>
-                            </Command.Item>
-                        {/each}
-                    </Command.Group>
-                </Command.List>
-            </Command.Root>
-        </Popover.Content>
-    </Popover.Root>
+
+<div>
+    <Select.Root selected={selectedLang}
+        onSelectedChange={(v) => {
+            v && (value = v.value);
+            onSelectedChange();
+        }}>
+        <Select.Trigger class="w-[462px] p-3 mb-2">
+            <Select.Value placeholder="Select language"/>
+        </Select.Trigger>
+        <Select.Content>
+            {#each langs as lang}
+                <Select.Item value={lang.value}>{@html lang.icon}{lang.label}</Select.Item>
+            {/each}
+        </Select.Content>
+      </Select.Root>
 </div>
