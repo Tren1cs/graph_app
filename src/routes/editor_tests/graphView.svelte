@@ -2,6 +2,9 @@
         import Vertice from "./Vertice.svelte";
         import {get_vertex_positions} from "$lib/first";
         import Edge from "./Edge.svelte";
+
+        import { ZoomIn, ZoomOut } from "lucide-svelte";
+
         let vertices:{id:string, x:number, y:number}[] = $state([{id: '0', x: 0, y: 0}]);
         let edges:{x1:number, y1:number, x2:number, y2:number}[] = $state([{x1: 1, y1: 1, x2: 1, y2: 1}]);
         let inputEdges:string[][] = [
@@ -58,6 +61,7 @@
     let mmb = false;
 
     let mouseover = false;
+    let mouseinview = false;
 
     function onmousedown(e: {which:number}) {
         if(e.which == 1) {
@@ -83,8 +87,7 @@
             position.x += e.movementX * (1/scale);
             position.y += e.movementY * (1/scale);
         }
-        console.log(origin);
-        console.log(position);
+        console.log(mouseinview)
     }
 
     function onmouseover(e) {
@@ -98,11 +101,22 @@
         }
     }
 
+    function onmouseenter(e) {
+        mouseinview = true;
+    }
+    function onmouseleave(e) {
+        mouseinview = false;
+    }
+
     function onwheel(e) {
-        if(mouseover) {
-            scale -= e.deltaY/3000;
-            console.log(e.deltaY)
+        if(mouseinview) {
+            Zoom(1 + ( -2 * Number(e.deltaY > 0)));
         }
+    }
+
+    function Zoom(x:number) {
+        scale += x * 0.06;
+        scale = Math.min(Math.max(0.16, scale), 1.9);
     }
 
 </script>
@@ -110,7 +124,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <div id="graphView" class=" overflow-hidden bg-transparent h-full w-full text-white top-0 left-0 text-center content-center z-10 absolute m-0"
-    {onmousedown} {onmouseup} {onpointermove} {onmouseover} {onmouseout} {onwheel}>
+    {onmousedown} {onmouseup} {onpointermove} {onmouseover} {onmouseout} {onwheel} {onmouseenter} {onmouseleave}>
 
     <div class="relative" style="transform: scale({scale}); left: {(position.x * scale)}px; top: {(position.y * scale)}px; transform-origin: center;">
         {#each vertices as el, i (i)}
@@ -122,5 +136,11 @@
         {/each}
 
         <button onclick={generateGraph}>create graph</button>
-    </div>    
+    </div>
+
+    <div class="bottom-0 absolute flex w-full h-fit justify-center items-center pointer-events-none">
+        <div class="flex align-baseline items-center pointer-events-auto rounded-md border-secondary border relative m-4 h-fit w-fit min-w-10 p-2">
+            <ZoomOut class="mr-2 h-4 w-4 text-sm" onclick={() => Zoom(-1)}/>{Math.round(scale * 100)/100}x<ZoomIn class="ml-2 h-4 w-4" onclick={() => Zoom(-1)}/>
+        </div>
+    </div>
 </div>
