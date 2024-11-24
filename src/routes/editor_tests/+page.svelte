@@ -3,7 +3,6 @@
     import GraphView from "./graphView.svelte";
     import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Button from "$lib/components/ui/button/button.svelte";
-    import { ArrowDownToLine } from 'lucide-svelte';
     import { ArrowUpFromLine } from "lucide-svelte";
     import * as Resizable from "$lib/components/ui/resizable";
     import Input from '$lib/components/ui/input/input.svelte';

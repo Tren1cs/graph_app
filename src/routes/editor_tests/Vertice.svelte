@@ -1,5 +1,5 @@
 <script lang="ts">
-	let {vertice = $bindable()} = $props();
+	let {vertice = $bindable(), scale = 1} = $props();
 	let moving = false;
 	
 	function onMouseDown() {
@@ -11,8 +11,8 @@
      */
 	function onMouseMove(e:{ movementX: number; movementY: number; }) {
 		if (moving) {
-			vertice.x += e.movementX;
-			vertice.y += e.movementY;
+			vertice.x += e.movementX * (1/scale);
+			vertice.y += e.movementY * (1/scale);
 		}
 	}
 	
@@ -50,7 +50,8 @@
 </style>
 
 
-<div onmousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div id="vertice" onmousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
 	<h1>
 		{vertice.id}
 	</h1>
