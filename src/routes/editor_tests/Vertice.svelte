@@ -1,9 +1,10 @@
 <script lang="ts">
-	let {vertice = $bindable()} = $props();
+	let {vertice = $bindable(), movingVertice = $bindable()} = $props();
 	let moving = false;
-	
+
 	function onMouseDown() {
 		moving = true;
+		movingVertice = true;
 	}
 	
 	/**
@@ -18,6 +19,10 @@
 	
 	function onMouseUp() {
 		moving = false;
+		setTimeout(() => {
+			movingVertice = false;
+		}, 20)	
+		
 	}
 	
 // 	$: console.log(moving);
