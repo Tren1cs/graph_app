@@ -5,7 +5,7 @@ function find(mas, key) {
     }
     return false;
 }
-function graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance) {
+function graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance, rebr_distance) {
     for (var vertex in graph) {
         var move_x = 0, move_y = 0;
         for (var other_vertex in graph) {
@@ -13,14 +13,14 @@ function graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_dista
             distance = Math.sqrt(Math.pow(vertex_pos[vertex][0] - vertex_pos[other_vertex][0], 2) + Math.pow(vertex_pos[other_vertex][1] - vertex_pos[vertex][1], 2));
             distance_x = vertex_pos[other_vertex][0] - vertex_pos[vertex][0];
             distance_y = vertex_pos[other_vertex][1] - vertex_pos[vertex][1];
-            if (vertex != other_vertex && find(graph[vertex], other_vertex)) {
+            if (vertex != other_vertex && find(graph[vertex], other_vertex) && distance > rebr_distance) {
                 var conection_power = void 0;
                 conection_power = Math.pow(distance, rebr_power);
                 move_x += distance_x * conection_power * move_distance;
                 move_y += distance_y * conection_power * move_distance;
             }
             var repulsion_power = void 0;
-            if (vertex != other_vertex) {
+            if (vertex != other_vertex && distance < rebr_distance) {
                 repulsion_power = vertex_power / distance;
                 move_x -= distance_x * repulsion_power * move_distance;
                 move_y -= distance_y * repulsion_power * move_distance;
@@ -39,6 +39,7 @@ function get_vertex_positions(rebrs) {
     var move_distance = 0.0000001; //? сила одного шага (... * move_distance)
     var min_start_pos_range = 0; //? минимальная стартовая координата вершины
     var max_start_pos_range = 1000; //? максимальная стартовая координата вершины
+    var rebr_distance = 100; //? дистанция между рёбрами
     //* конвертация входных данных
     console.log(rebrs);
     var graph = {};
@@ -63,7 +64,7 @@ function get_vertex_positions(rebrs) {
     console.log(vertex_pos);
     //! ну тут ещё был, дальше его точно нет, ведь теперь ИЗМЕНЕНИЕ РАСПОЛОЖЕНИЯ
     for (var i = 0; i < iteration_times; i++) {
-        vertex_pos = graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance);
+        vertex_pos = graph_alignment(graph, vertex_pos, rebr_power, vertex_power, move_distance, rebr_distance);
     }
     console.log(vertex_pos);
     //! бог есть, возвращаю координаты (ключ: имя вершины; значание - Array из двух значений (x и y)), 
