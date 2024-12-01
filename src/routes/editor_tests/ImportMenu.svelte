@@ -10,15 +10,11 @@
 
     import { Textarea } from "$lib/components/ui/textarea/index.js";
 
-    let { input = $bindable(""), input_type = $bindable("code"), ...props } = $props();
-
-    $inspect(input_type)
-
-
+    let { input = $bindable(""), input_type = $bindable("code"), lang = $bindable(""), ...props } = $props();
 </script>
 
 <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "secondary" }) + " mr-2"}><ArrowDownToLine class="mr-2 h-4 w-4"/>Import</Dialog.Trigger>
+    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><ArrowDownToLine class="mr-2 h-4 w-4"/>Import</Dialog.Trigger>
     <Dialog.Content>
         <Dialog.Header>
             <Dialog.Title class="mb-4">Import Graph</Dialog.Title>
@@ -32,7 +28,7 @@
                     </Tabs.List>
 
                     <Tabs.Content value="code">
-                        <LanguageSelection />
+                        <LanguageSelection bind:value={lang}/>
                         <Textarea placeholder="Paste your code here" class="mb-2"/>
 
                         <Dialog.Close class="w-full ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center
@@ -40,7 +36,7 @@
                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
                             disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90
                             h-10 px-4 py-2">
-                            Import graph
+                            <ArrowDownToLine class="mr-2 h-4 w-4"/>Import graph
                         </Dialog.Close>
                     </Tabs.Content>
                         
@@ -52,7 +48,7 @@
                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
                             disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90
                             h-10 px-4 py-2">
-                            Import graph
+                            <ArrowDownToLine class="mr-2 h-4 w-4"/>Import graph
                         </Dialog.Close>
                     </Tabs.Content>
 
@@ -64,7 +60,7 @@
                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
                             disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90
                             h-10 px-4 py-2">
-                            Import graph
+                            <ArrowDownToLine class="mr-2 h-4 w-4"/>Import graph
                         </Dialog.Close>
                     </Tabs.Content>
                 </Tabs.Root>
