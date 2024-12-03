@@ -56,7 +56,7 @@ function get_vertex_positions(rebrs: Array<Array<string>>){
     const max_start_pos_range_x: number = 1000;  //? максимальная стартовая координата вершины по x
     const min_start_pos_range_y: number = 0;     //? минимальная стартовая координата вершины по y
     const max_start_pos_range_y: number = 1000;  //? максимальная стартовая координата вершины по y
-    const rebr_distance = 100;                   //? дистанция между рёбрами
+    const rebr_distance: number = 100;           //? дистанция между рёбрами
     const central_full: number = 1000;           //? то, на скалько далеко находятся вершины от границ
 
     //* конвертация входных данных
