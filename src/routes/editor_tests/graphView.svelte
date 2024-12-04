@@ -6,7 +6,7 @@
     import { ZoomIn, ZoomOut } from "lucide-svelte";
 
     let { oninvalidformat, oninvalidcode } = $props();
-    // TODO: Вызывать oninvalidformat() при неправильном формате списка смежности или матрицы, oninvalidcode() при ошибке парсинга кода
+    // TODO: Вызывать oninvalidcode() при ошибке парсинга кода
     let vertices:{id:string, x:number, y:number}[] = $state([{id: '0', x: 0, y: 0}]);
     let edges:{x1:number, y1:number, x2:number, y2:number}[] = $state([{x1: 1, y1: 1, x2: 1, y2: 1}]);
     let inputEdges:string[][] = $state([
@@ -35,31 +35,96 @@
 
     export function importGraph(graphTextInput, graphTextInputType)
     {
+        let lines = graphTextInput.split("\n");
+        let localInputEdges:string[][] = [];
+        let incorrectInputEdges:boolean = false;
         switch (graphTextInputType)
         {
             case "list":
-                let lines = graphTextInput.split("\n");
-                let localInputEdges:string[][] = [];
                 for (let i = 0; i < lines.length; i++)
                 {
                     let line = lines[i];
                     if (line.length > 0)
                     {
                         let edge = line.split(" ");
-                        if (edge.length == 2)
-                        {
+                        if (edge.length == 2) {
                             localInputEdges.push(edge);
+                        }
+
+                        else {
+                            incorrectInputEdges = true;
+                            break;
                         }
                     }
                 }
-                inputEdges = localInputEdges;
-                generateGraph();
-                break;
+
+                if (incorrectInputEdges === false) {
+                    inputEdges = localInputEdges;
+                    generateGraph();
+                    break;
+                }
+
+                else { 
+                    oninvalidformat();
+                    break;
+                }
 
             case "code":
                 break;
 
             case "matrix":
+                let splittedMatrix = [];
+                for (let i = 0; i < lines.length; i++)
+                {
+                    for (let i = 0; i < lines.length; i++)
+                    {
+                        splittedMatrix.push(lines[i].split(" "));
+                    }
+                }
+                for (let i = 1; i < lines.length; i++)
+                {
+                    if (splittedMatrix[i].length > 0)
+                    {
+                        if (splittedMatrix[i].length === lines.length) {
+                            for (let j = 1; j < splittedMatrix[i].length; j++)
+                            {
+                                let edge:string = splittedMatrix[i][j];
+                                if ((i === j && edge !== "0") || edge !== splittedMatrix[j][i] || (edge !== "0" && edge !== "1") 
+                                      || splittedMatrix[0][j] !== splittedMatrix[j][0]) {
+                                    incorrectInputEdges = true;
+                                    break;
+                                }   
+
+                                else {
+                                    if (edge === "1")
+                                    {
+                                        localInputEdges.push([splittedMatrix[i][0], splittedMatrix[0][j]]);
+                                    }
+                                }
+                            }
+                        }
+                    
+                        else {
+                            incorrectInputEdges = true;
+                        }
+
+                        if (incorrectInputEdges)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                if (!incorrectInputEdges) {
+                    inputEdges = localInputEdges;
+                    generateGraph();
+                    break;
+                }
+
+                else { 
+                    oninvalidformat();
+                    break;
+                }
                 break;
 
             default:
