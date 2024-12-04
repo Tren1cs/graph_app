@@ -1,11 +1,18 @@
 <script lang="ts">
 	let {vertice = $bindable(), movingVertice = $bindable(), scale = 1} = $props();
 	let moving = false;
-	
+	let inputId = $state(vertice.id);
 	function onMouseDown() {
 		moving = true;
 		movingVertice = true;
 	}
+
+	$effect(() => 
+	{
+		inputId = vertice.id;
+	})
+
+	
 	
 	/**
      * @param {{ movementX: number; movementY: number; }} e
@@ -41,14 +48,17 @@
 		position: absolute;
 		z-index: 2;
 	}
-	h1{
+	input{
 		color: rgb(222, 222, 222);
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         text-align: center;
-        position: relative;
-        top: 10px;
-        left: 0px;
+        position: absolute;
+        top: 9px;
+        left: -476px;
 		font-size: 20px;
+		width: 1000px;
+		background: rgba(0, 151, 19, 0);
+		outline: none;
 	}
 
 </style>
@@ -56,8 +66,7 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div id="vertice" onmousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
-	<h1>
-		{vertice.id}
-	</h1>
+	<input bind:value={inputId} onchange = {() => vertice.id = inputId}/>
 </div>
+
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />

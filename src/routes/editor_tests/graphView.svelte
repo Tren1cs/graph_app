@@ -8,6 +8,7 @@
     let { oninvalidformat, oninvalidcode } = $props();
     // TODO: Вызывать oninvalidcode() при ошибке парсинга кода
     let vertices:{id:string, x:number, y:number}[] = $state([{id: '0', x: 0, y: 0}]);
+    let oldIds:string[] = $state(['0']);
     let edges:{x1:number, y1:number, x2:number, y2:number}[] = $state([{x1: 1, y1: 1, x2: 1, y2: 1}]);
     let inputEdges:string[][] = $state([
         ['1', '2'],
@@ -135,6 +136,13 @@
     export function generateGraph()
     {
         vertices = get_vertex_positions(inputEdges);
+        let localOldIds:string[] = [];
+        for (let i = 0; i < vertices.length; i++)
+        {
+            localOldIds.push(vertices[i].id);
+        }
+        oldIds = localOldIds;
+
         let localEdges:{x1:number, y1:number, x2:number, y2:number}[] = [];
         for (let i = 0; i < inputEdges.length; i++)
         {
@@ -149,13 +157,53 @@
     }
 
     $effect(() => {
+        let localEdges:{x1:number, y1:number, x2:number, y2:number}[] = [];
+        let oldId:string = "B1tzzzzz";
+        let newIdIdx:number = -1;
+        let areIdsSame:boolean = false;
         for (let i = 0; i < vertices.length; i++)
         {
-            vertices[i].id;
-            vertices[i].x;
-            vertices[i].y;
+            if (vertices[i].id !== oldIds[i])
+            {
+                oldId = oldIds[i];
+                oldIds[i] = vertices[i].id;
+                newIdIdx = i;
+            }
         }
-        let localEdges:{x1:number, y1:number, x2:number, y2:number}[] = [];
+
+        if (oldId !== "B1tzzzzz")
+        {
+            for (let i = 0; i < inputEdges.length; i++)
+            { 
+                for (let j = 0; j < 2; j++)
+                {
+                    if (inputEdges[i][j] === vertices[newIdIdx].id)
+                    {
+                        areIdsSame = true;
+                        break;
+                    }
+                }
+
+                if (areIdsSame) break;
+            }
+
+            if (areIdsSame) 
+            {
+                vertices[newIdIdx].id = oldId;
+                oldIds[newIdIdx] = oldId;
+            }
+            else
+            {
+                for (let i = 0; i < inputEdges.length; i++)
+                { 
+                    for (let j = 0; j < 2; j++)
+                    {
+                        if (inputEdges[i][j] === oldId) inputEdges[i][j] = vertices[newIdIdx].id;
+                    }
+                }
+            }
+        }
+
         for (let i = 0; i < inputEdges.length; i++)
         {
             let firstVertice = vertices.find(v => v.id === inputEdges[i][0]);
@@ -165,6 +213,7 @@
                 localEdges.push({x1: firstVertice.x, y1: firstVertice.y, x2: secondVertice.x, y2: secondVertice.y});
             }
         }   
+
         edges = localEdges;
     });
 
