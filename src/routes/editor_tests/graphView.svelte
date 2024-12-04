@@ -7,10 +7,9 @@
 
     let { oninvalidformat, oninvalidcode } = $props();
     // TODO: Вызывать oninvalidformat() при неправильном формате списка смежности или матрицы, oninvalidcode() при ошибке парсинга кода
-
     let vertices:{id:string, x:number, y:number}[] = $state([{id: '0', x: 0, y: 0}]);
     let edges:{x1:number, y1:number, x2:number, y2:number}[] = $state([{x1: 1, y1: 1, x2: 1, y2: 1}]);
-    let inputEdges:string[][] = [
+    let inputEdges:string[][] = $state([
         ['1', '2'],
         ['1', '3'],
         ['2', '4'],
@@ -18,7 +17,56 @@
         ['3', '5'],
         ['3', '4'],
         ['4', '6'],
-    ];
+    ]);
+
+    let origin = $state({x: 0, y: 0});
+    let neworigin = $state({x: 0, y: 0})
+    let position = $state({x:0, y: 0})
+    let isVerticeMoved = $state(false);
+
+    function SpawnVertice()
+    {
+        if (!isVerticeMoved)
+        {
+           let newVerticeId = String(vertices.length + 1);
+           vertices.push({id: newVerticeId, x: position.x - 30, y: position.y - 30});
+        }
+    }
+
+    export function importGraph(graphTextInput, graphTextInputType)
+    {
+        switch (graphTextInputType)
+        {
+            case "list":
+                let lines = graphTextInput.split("\n");
+                let localInputEdges:string[][] = [];
+                for (let i = 0; i < lines.length; i++)
+                {
+                    let line = lines[i];
+                    if (line.length > 0)
+                    {
+                        let edge = line.split(" ");
+                        if (edge.length == 2)
+                        {
+                            localInputEdges.push(edge);
+                        }
+                    }
+                }
+                inputEdges = localInputEdges;
+                generateGraph();
+                break;
+
+            case "code":
+                break;
+
+            case "matrix":
+                break;
+
+            default:
+                break;
+        }
+    }
+
     export function generateGraph()
     {
         vertices = get_vertex_positions(inputEdges);
@@ -56,11 +104,7 @@
     });
 
     
-
     let scale = $state(1.0);
-    let origin = $state({x: 0, y: 0});
-    let neworigin = $state({x: 0, y: 0})
-    let position = $state({x:0, y: 0})
 
     let lmb = false;
     let mmb = false;
@@ -127,19 +171,18 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
-<div id="graphView" class=" overflow-hidden bg-transparent h-full w-full text-white top-0 left-0 text-center content-center z-10 absolute m-0"
+<div ondblclick = {SpawnVertice} id="graphView" class=" overflow-hidden bg-transparent h-full w-full text-white top-0 left-0 text-center content-center z-10 absolute m-0"
     {onmousedown} {onmouseup} {onpointermove} {onmouseover} {onmouseout} {onwheel} {onmouseenter} {onmouseleave}>
 
     <div class="relative" style="transform: scale({scale}); left: {(position.x * scale)}px; top: {(position.y * scale)}px; transform-origin: center;">
         {#each vertices as el, i (i)}
-            <Vertice bind:vertice = {vertices[i]} {scale}/>
+            <Vertice bind:vertice = {vertices[i]} bind:movingVertice = {isVerticeMoved} {scale}/>
         {/each}
 
         {#each edges as el, i (i)}  
             <Edge bind:edge = {edges[i]} />
         {/each}
 
-        <button onclick={generateGraph}>create graph</button>
     </div>
 
     <div class="bottom-0 absolute flex w-full h-fit justify-center items-center pointer-events-none">
