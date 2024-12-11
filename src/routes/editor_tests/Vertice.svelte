@@ -1,10 +1,20 @@
 <script lang="ts">
-	let {vertice = $bindable(), movingVertice = $bindable(), scale = 1} = $props();
+	let {vertice = $bindable(), movingVertice = $bindable(), selectedObjects = $bindable(),
+		 isShiftDown = $bindable(), scale = 1} = $props();
 	let moving = false;
 	let inputId = $state(vertice.id);
+	let borderColor = $state("rgb(49, 49, 49)")
 	function onMouseDown() {
 		moving = true;
 		movingVertice = true;
+		if (isShiftDown)
+		{
+			selectedObjects.push(vertice.id);
+		}
+		else
+		{
+			selectedObjects = [vertice.id];
+		}
 	}
 
 	$effect(() => 
@@ -12,6 +22,18 @@
 		inputId = vertice.id;
 	})
 
+	$effect(() => 
+	{
+		
+		let Selected = selectedObjects.find(v => v === vertice.id)
+		if (Selected !== undefined)
+		{
+            borderColor = "rgb(100, 100, 100)";
+        } 
+		else {
+            borderColor = "rgb(49, 49, 49)";
+        }
+	})
 	
 	
 	/**
@@ -65,7 +87,7 @@
 
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div id="vertice" onmousedown={onMouseDown} style="left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
+<div id="vertice" onmousedown={onMouseDown} style="border: solid 6px {borderColor}; left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
 	<input bind:value={inputId} onchange = {() => vertice.id = inputId}/>
 </div>
 

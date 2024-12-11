@@ -8,12 +8,13 @@
 
     let innerHeight = $state(0);
 
-
+    
     let { oninvalidformat, oninvalidcode } = $props();
     // TODO: Вызывать oninvalidcode() при ошибке парсинга кода
     let vertices:{id:string, x:number, y:number}[] = $state([{id: '0', x: 0, y: 0}]);
     let oldIds:string[] = $state(['0']);
     let edges:{x1:number, y1:number, x2:number, y2:number}[] = $state([{x1: 1, y1: 1, x2: 1, y2: 1}]);
+    let selected:string[] = $state([]);
     let inputEdges:string[][] = $state([
         ['1', '2'],
         ['1', '3'],
@@ -28,15 +29,24 @@
     let origin = $state({x: 0, y: 0});
     let neworigin = $state({x: 0, y: 0});
     let position = $state({x: 0, y: 0});
-    let isVerticeMoved = $state(false);
+    let isSelectedMoving = $state(false);
+    
+    function unselect()
+    {
+        if (!isSelectedMoving)
+        {
+            selected = [];
+        }
+    }
+
     function SpawnVertice()
     {
-        if (!isVerticeMoved && browser)
+        if (!isSelectedMoving)
         {
-           let newVerticeId = String(vertices.length + 1);
-           console.log(position);
-           console.log(origin);
-           vertices.push({id: newVerticeId, x: (-position.x) + (origin.x) - 30, y: ((-position.y) + (origin.y) - innerHeight / 2 - 30)});
+            let newVerticeId = String(vertices.length + 1);
+            //console.log(position);
+            //console.log(origin);
+            vertices.push({id: newVerticeId, x: (-position.x) + (origin.x) - 30, y: ((-position.y) + (origin.y) - innerHeight / 2 - 30)});
         }
     }
 
@@ -223,15 +233,44 @@
         edges = localEdges;
     });
 
+
     let lmb = false;
     let mmb = false;
 
     let mouseover = false;
     let mouseinview = false;
+    let isShiftDown = $state(false);
+
+    function hotkeyDownHandler(e)
+    {
+        switch (e.key)
+        {
+            case "Shift":
+                isShiftDown = true;
+        }
+    }
+
+    function hotkeyUpHandler(e)
+    {
+        switch (e.key)
+        {
+            case "Shift":
+                isShiftDown = false;
+        }
+    } 
+
+    $effect(() => {
+        if (selected.length > 1 && isShiftDown) 
+        {
+            inputEdges.push(selected);
+            selected = [selected[1]];
+        }
+    })
 
     function onmousedown(e: {which:number}) {
         if(e.which == 1) {
             lmb = true;
+            unselect();
         }
         if(e.which == 2) {
             mmb = true;
@@ -293,7 +332,8 @@
 
     <div class="relative" style="transform: scale({scale}); left: {(position.x * scale)}px; top: {(position.y * scale)}px; transform-origin: center;">
         {#each vertices as el, i (i)}
-            <Vertice bind:vertice = {vertices[i]} bind:movingVertice = {isVerticeMoved} {scale}/>
+            <Vertice bind:vertice = {vertices[i]} bind:movingVertice = {isSelectedMoving}
+             bind:selectedObjects = {selected} bind:isShiftDown = {isShiftDown} {scale}/>
         {/each}
 
         {#each edges as el, i (i)}  
@@ -309,4 +349,4 @@
     </div>
 </div>
 
-<svelte:window bind:innerHeight/>
+<svelte:window onkeydown = {hotkeyDownHandler} onkeyup = {hotkeyUpHandler} bind:innerHeight/>
