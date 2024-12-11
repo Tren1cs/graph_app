@@ -4,6 +4,10 @@
     import Edge from "./Edge.svelte";
 
     import { ZoomIn, ZoomOut } from "lucide-svelte";
+    import { browser } from '$app/environment';
+
+    let innerHeight = $state(0);
+
 
     let { oninvalidformat, oninvalidcode } = $props();
     // TODO: Вызывать oninvalidcode() при ошибке парсинга кода
@@ -20,17 +24,19 @@
         ['4', '6'],
     ]);
 
+    let scale = $state(1.0);
     let origin = $state({x: 0, y: 0});
-    let neworigin = $state({x: 0, y: 0})
-    let position = $state({x:0, y: 0})
+    let neworigin = $state({x: 0, y: 0});
+    let position = $state({x: 0, y: 0});
     let isVerticeMoved = $state(false);
-
     function SpawnVertice()
     {
-        if (!isVerticeMoved)
+        if (!isVerticeMoved && browser)
         {
            let newVerticeId = String(vertices.length + 1);
-           vertices.push({id: newVerticeId, x: position.x - 30, y: position.y - 30});
+           console.log(position);
+           console.log(origin);
+           vertices.push({id: newVerticeId, x: (-position.x) + (origin.x) - 30, y: ((-position.y) + (origin.y) - innerHeight / 2 - 30)});
         }
     }
 
@@ -217,9 +223,6 @@
         edges = localEdges;
     });
 
-    
-    let scale = $state(1.0);
-
     let lmb = false;
     let mmb = false;
 
@@ -278,7 +281,7 @@
 
     function Zoom(x:number) {
         scale += x * 0.06;
-        scale = Math.min(Math.max(0.16, scale), 1.9);
+        scale = Math.min(Math.max(0.16, scale), 1.9);//TODO: обновлять значение origina
     }
 
 </script>
@@ -305,3 +308,5 @@
         </div>
     </div>
 </div>
+
+<svelte:window bind:innerHeight/>

@@ -62,7 +62,6 @@
             <Resizable.PaneGroup direction="horizontal">
                 <Resizable.Pane defaultSize={20} minSize={12} maxSize={40} class="bg-background z-50 p-4">
                     <input class="mb-4 border-none text-xl bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-fit w-full rounded-md border p-0 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" bind:value={settings.GraphName} placeholder="Graph name"/>
-                    <Button class="" variant="default" on:click={graphView.generateGraph}>Spawn Vertices</Button>
                     <Button onclick={InvalidCodeToast}>asdasd</Button>
                 </Resizable.Pane>
                 <Resizable.Handle class="z-50" />
