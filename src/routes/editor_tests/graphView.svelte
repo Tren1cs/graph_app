@@ -2,18 +2,17 @@
     import Vertice from "./Vertice.svelte";
     import {get_vertex_positions} from "$lib/first";
     import Edge from "./Edge.svelte";
-
+    import { onMount } from 'svelte';
     import { ZoomIn, ZoomOut } from "lucide-svelte";
-    import { browser } from '$app/environment';
 
     let innerHeight = $state(0);
 
     
     let { oninvalidformat, oninvalidcode } = $props();
     // TODO: Вызывать oninvalidcode() при ошибке парсинга кода
-    let vertices:{id:string, x:number, y:number}[] = $state([{id: '0', x: 0, y: 0}]);
-    let oldIds:string[] = $state(['0']);
-    let edges:{x1:number, y1:number, x2:number, y2:number}[] = $state([{x1: 1, y1: 1, x2: 1, y2: 1}]);
+    let vertices:{id:string, x:number, y:number}[] = $state([]);
+    let oldIds:string[] = $state([]);
+    let edges:{x1:number, y1:number, x2:number, y2:number}[] = $state([]);
     let selected:string[] = $state([]);
     let inputEdges:string[][] = $state([
         ['1', '2'],
@@ -30,7 +29,7 @@
     let neworigin = $state({x: 0, y: 0});
     let position = $state({x: 0, y: 0});
     let isSelectedMoving = $state(false);
-    
+    let deletionQuery = $state([]);
     function unselect()
     {
         if (!isSelectedMoving)
@@ -177,30 +176,37 @@
         let oldId:string = "B1tzzzzz";
         let newIdIdx:number = -1;
         let areIdsSame:boolean = false;
-        for (let i = 0; i < vertices.length; i++)
+        if (vertices.length >= oldIds.length)
         {
-            if (vertices[i].id !== oldIds[i])
+            for (let i = 0; i < vertices.length; i++)
             {
-                oldId = oldIds[i];
-                oldIds[i] = vertices[i].id;
-                newIdIdx = i;
+                if (vertices[i].id !== oldIds[i])
+                {
+                    oldId = oldIds[i];
+                    oldIds[i] = vertices[i].id;
+                    newIdIdx = i;
+                }
             }
         }
-
+        else oldId = "";
+        
         if (oldId !== "B1tzzzzz")
         {
-            for (let i = 0; i < inputEdges.length; i++)
-            { 
-                for (let j = 0; j < 2; j++)
-                {
-                    if (inputEdges[i][j] === vertices[newIdIdx].id)
+            if (vertices.length >= oldIds.length)
+            {  
+                for (let i = 0; i < inputEdges.length; i++)
+                { 
+                    for (let j = 0; j < 2; j++)
                     {
-                        areIdsSame = true;
-                        break;
+                        if (inputEdges[i][j] === vertices[newIdIdx].id)
+                        {
+                            areIdsSame = true;
+                            break;
+                        }
                     }
-                }
 
-                if (areIdsSame) break;
+                    if (areIdsSame) break;
+                }
             }
 
             if (areIdsSame) 
@@ -233,6 +239,26 @@
         edges = localEdges;
     });
 
+    $effect(() => {
+        if (deletionQuery.length > 0) {
+            for (let i = 0; i < deletionQuery.length; i++)
+            {
+                for (let j = 0; j < inputEdges.length; j++)
+                {
+                    if (inputEdges[j][0] == deletionQuery[i] || inputEdges[j][1] == deletionQuery[i])
+                    {
+                        inputEdges.splice(j, 1);
+                        j--;
+                    }
+                }
+                let idx = vertices.findIndex(v => v.id === deletionQuery[i]);
+                vertices.splice(idx, 1);
+            }
+            deletionQuery = [];
+        }
+        
+    })
+
 
     let lmb = false;
     let mmb = false;
@@ -240,7 +266,7 @@
     let mouseover = false;
     let mouseinview = false;
     let isShiftDown = $state(false);
-
+    onMount(() => {document.addEventListener('contextmenu', event => event.preventDefault());})
     function hotkeyDownHandler(e)
     {
         switch (e.key)
@@ -332,8 +358,9 @@
 
     <div class="relative" style="transform: scale({scale}); left: {(position.x * scale)}px; top: {(position.y * scale)}px; transform-origin: center;">
         {#each vertices as el, i (i)}
-            <Vertice bind:vertice = {vertices[i]} bind:movingVertice = {isSelectedMoving}
-             bind:selectedObjects = {selected} bind:isShiftDown = {isShiftDown} {scale}/>
+            <Vertice bind:deletionQuery = {deletionQuery} bind:vertice = {vertices[i]}
+             bind:movingVertice = {isSelectedMoving} bind:selectedObjects = {selected}
+              bind:isShiftDown = {isShiftDown} {scale}/>
         {/each}
 
         {#each edges as el, i (i)}  
