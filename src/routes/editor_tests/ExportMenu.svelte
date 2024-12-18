@@ -8,15 +8,13 @@
     import * as Dialog from "$lib/components/ui/dialog";
     import * as Tabs from "$lib/components/ui/tabs";
     import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
-
+    import { Separator } from "$lib/components/ui/separator/index.js";
     import { Textarea } from "$lib/components/ui/textarea/index.js";
 
     import hljs from 'highlight.js';
-
-    let { adjlist = "", adjmatrix = "", ...props } = $props();
-
+    let { graphView = $bindable() }= $props();
+    let edgematrix = $state("");
     let exportType = "";
-
 
     // Сделайте здесь экспорт в код, пожалуйста, в этом компоненте
     function generateCode(language: string ) {
@@ -38,7 +36,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark-reasonable.css">
 <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><ArrowUpFromLine class="mr-2 h-4 w-4"/>Export</Dialog.Trigger>
+    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><ArrowUpFromLine class="mr-2 h-6 w-6"/>Export</Dialog.Trigger>
     <Dialog.Content>
         <Dialog.Header>
             <Dialog.Title class="mb-4">Export Graph</Dialog.Title>
@@ -47,7 +45,7 @@
                 <Tabs.Root value="code" class="w-full min-h-[220px]">
                     <Tabs.List class="w-full">
                         <Tabs.Trigger value="code" class="w-full" onfocus={() => exportType = "code"}>To code</Tabs.Trigger>
-                        <Tabs.Trigger value="list" class="w-full" onfocus={() => exportType = "list"}>To adjacency list</Tabs.Trigger>
+                        <Tabs.Trigger value="list" class="w-full" onfocus={() => exportType = "list"}>To edge list</Tabs.Trigger>
                         <Tabs.Trigger value="matrix" class="w-full" onfocus={() => exportType = "matrix"}>To adjacency matrix</Tabs.Trigger>
                     </Tabs.List>
 
@@ -60,13 +58,15 @@
 
                     <Tabs.Content value="list">
                         <ScrollArea class="w-full h-[212px] border-secondary border rounded-md p-3">
-                            {adjlist}
+                            {#each graphView.exportAdjList() as edge}
+                                <div class="text-sm">{edge[0] + " " + edge[1]} </div>
+                            {/each}
                         </ScrollArea>
                     </Tabs.Content>
 
                     <Tabs.Content value="matrix">
                         <ScrollArea class="w-full h-[212px] border-secondary border rounded-md p-3">
-                            {adjmatrix}
+                            {edgematrix}
                         </ScrollArea>
                     </Tabs.Content>
                 </Tabs.Root>

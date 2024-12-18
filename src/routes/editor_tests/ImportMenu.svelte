@@ -14,7 +14,7 @@
 </script>
 
 <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><ArrowDownToLine class="mr-2 h-4 w-4"/>Import</Dialog.Trigger>
+    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><ArrowDownToLine class="mr-2 h-6 w-6"/>Import</Dialog.Trigger>
     <Dialog.Content>
         <Dialog.Header>
             <Dialog.Title class="mb-4">Import Graph</Dialog.Title>
@@ -23,7 +23,7 @@
                 <Tabs.Root value="code" class="w-full min-h-[220px]">
                     <Tabs.List class="w-full">
                         <Tabs.Trigger value="code" class="w-full" onfocus={() => input_type = "code"}>From code</Tabs.Trigger>
-                        <Tabs.Trigger value="list" class="w-full" onfocus={() => input_type = "list"}>From adjacency list</Tabs.Trigger>
+                        <Tabs.Trigger value="list" class="w-full" onfocus={() => input_type = "list"}>From edge list</Tabs.Trigger>
                         <Tabs.Trigger value="matrix" class="w-full" onfocus={() => input_type = "matrix"}>From adjacency matrix</Tabs.Trigger>
                     </Tabs.List>
 
@@ -36,7 +36,7 @@
                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
                             disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90
                             h-10 px-4 py-2">
-                            <ArrowDownToLine class="mr-2 h-4 w-4"/>Import graph
+                            <ArrowDownToLine class="mr-2 h-6 w-6"/>Import graph
                         </Dialog.Close>
                     </Tabs.Content>
                         
@@ -48,7 +48,7 @@
                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
                             disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90
                             h-10 px-4 py-2">
-                            <ArrowDownToLine class="mr-2 h-4 w-4"/>Import graph
+                            <ArrowDownToLine class="mr-2 h-6 w-6"/>Import graph
                         </Dialog.Close>
                     </Tabs.Content>
 

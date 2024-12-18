@@ -4,6 +4,7 @@
     import Edge from "./Edge.svelte";
     import { onMount } from 'svelte';
     import { ZoomIn, ZoomOut } from "lucide-svelte";
+    import Input from "$lib/components/ui/input/input.svelte";
 
     let innerHeight = $state(0);
 
@@ -14,15 +15,8 @@
     let oldIds:string[] = $state([]);
     let edges:{x1:number, y1:number, x2:number, y2:number}[] = $state([]);
     let selected:string[] = $state([]);
-    let inputEdges:string[][] = $state([
-        ['1', '2'],
-        ['1', '3'],
-        ['2', '4'],
-        ['2', '5'],
-        ['3', '5'],
-        ['3', '4'],
-        ['4', '6'],
-    ]);
+    let inputEdges:string[][] = $state([]);
+    let edgesMatrix:string = $state("");
 
     let scale = $state(1.0);
     let origin = $state({x: 0, y: 0});
@@ -45,6 +39,7 @@
             let newVerticeId = String(vertices.length + 1);
             //console.log(position);
             //console.log(origin);
+            selected.push(newVerticeId);
             vertices.push({id: newVerticeId, x: (-position.x) + (origin.x) - 30, y: ((-position.y) + (origin.y) - innerHeight / 2 - 30)});
         }
     }
@@ -148,6 +143,11 @@
         }
     }
 
+    export function exportAdjList()
+    {
+        return inputEdges;
+    }
+
     export function generateGraph()
     {
         vertices = get_vertex_positions(inputEdges);
@@ -176,7 +176,7 @@
         let oldId:string = "B1tzzzzz";
         let newIdIdx:number = -1;
         let areIdsSame:boolean = false;
-        if (vertices.length >= oldIds.length)
+        if (vertices.length === oldIds.length)
         {
             for (let i = 0; i < vertices.length; i++)
             {
@@ -188,11 +188,14 @@
                 }
             }
         }
-        else oldId = "";
+        else
+        {
+            oldId = "";
+        } 
         
         if (oldId !== "B1tzzzzz")
         {
-            if (vertices.length >= oldIds.length)
+            if (vertices.length === oldIds.length)
             {  
                 for (let i = 0; i < inputEdges.length; i++)
                 { 
@@ -206,6 +209,15 @@
                     }
 
                     if (areIdsSame) break;
+                }
+            }
+
+            else
+            {
+                oldIds = [];
+                for (let i = 0; i < vertices.length; i++)
+                {
+                    oldIds.push(vertices[i].id);
                 }
             }
 
@@ -259,7 +271,6 @@
         
     })
 
-
     let lmb = false;
     let mmb = false;
 
@@ -286,10 +297,24 @@
     } 
 
     $effect(() => {
-        if (selected.length > 1 && isShiftDown) 
+        if (selected.length > 1 && isShiftDown)
         {
-            inputEdges.push(selected);
-            selected = [selected[1]];
+            $inspect(inputEdges);
+            let firstEdge = inputEdges.find(v => v === selected.reverse());
+            let secondEdge = inputEdges.find(v => v === selected.reverse());
+            console.log(firstEdge);
+            console.log(secondEdge);
+            if (firstEdge === undefined && secondEdge == undefined && selected[0] != selected[1])
+            {
+                inputEdges.push(selected);
+                selected = [selected[1]];
+            }
+            else
+            {
+                $inspect(inputEdges);
+                console.log("YE");
+                selected = [selected[0]];
+            }   
         }
     })
 
