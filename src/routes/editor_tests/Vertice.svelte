@@ -34,7 +34,7 @@
 		let Selected = selectedObjects.find(v => v === vertice.id)
 		if (Selected !== undefined)
 		{
-            borderColor = "rgb(100, 100, 100)";
+			setTimeout(() => {borderColor = "rgb(100, 100, 100)"}, 2);
         } 
 		else {
             borderColor = "rgb(49, 49, 49)";
@@ -76,15 +76,32 @@
 		position: absolute;
 		z-index: 2;
 	}
+	
 	input{
 		color: rgb(222, 222, 222);
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         text-align: center;
         position: absolute;
-        top: 9px;
-        left: -476px;
-		font-size: 20px;
-		width: 1000px;
+        top: 8px;
+        left: -6px;
+		font-size: 22px;
+		width: 60px;
+		background: rgba(0, 151, 19, 0);
+		outline: none;
+	}
+	span{
+		display:inline-block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis; max-width: 60px;
+		color: rgb(222, 222, 222);
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        text-align: center;
+        position: absolute;
+        top: 8px;
+        left: -6px;
+		font-size: 22px;
+		width: 60px;
 		background: rgba(0, 151, 19, 0);
 		outline: none;
 	}
@@ -94,7 +111,11 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div id={vertice.id} {onmousedown} style="border: solid 6px {borderColor}; left: {vertice.x}px; top: {vertice.y}px;" class="Vertice">
-	<input bind:value={inputId} onchange = {() => vertice.id = inputId}/>
+	{#if borderColor === "rgb(100, 100, 100)"}
+		<input bind:value={inputId} onchange = {() => vertice.id = inputId}/>
+	{:else}
+		<span>{inputId}</span>
+	{/if}
 </div>
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
