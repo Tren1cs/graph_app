@@ -16,7 +16,7 @@
     <Dialog.Content>
         <Dialog.Header>
             <Dialog.Title class="mb-4 text-4xl"  >Description</Dialog.Title>
-            <Dialog.Description class="text-xl"></Dialog.Description>
+            <Dialog.Description class="text-xl">This is graph editor. You can import, export and edit graph here.</Dialog.Description>
             <Dialog.Title class="mb-4 text-4xl" >Formats
                 <p></p>
                 <a href="https://en.wikipedia.org/wiki/Edge_list" class="text-2xl" style = "color: rgb(136, 162, 255);">Edge list</a>
