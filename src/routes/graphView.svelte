@@ -18,6 +18,7 @@
     let inputEdges:string[][] = $state([]);
     let edgesMatrix:string = $state("");
     const maxVertices = 1e5;
+
     let uniqueVertices = $derived.by(() => 
     {
         let st = new Set();
@@ -27,7 +28,6 @@
         }
         return st;
     });
-    
 
     let scale = $state(1.0);
     let origin = $state({x: 0, y: 0});
@@ -161,6 +161,72 @@
         }
     }
 
+    export function exportCode(lang:string)
+    {
+        let adjList:{id:string, arr:string[]}[] = [];
+        for (let i = 0; i < inputEdges.length; i++)
+        {
+            for (let j = 0; j < 2; j++)
+            {
+                let v = inputEdges[i][j];
+                let obj = adjList.find(e => e.id === v);
+                if (obj === undefined)
+                {
+                    adjList.push({id: v, arr: []})
+                    obj = adjList.find(e => e.id === v);
+                }
+                obj.arr.push(inputEdges[i][1 - j]);
+            }
+        }
+
+        console.log(adjList);
+        let code = "";
+        switch (lang)
+        {
+            case "python":
+                if (adjList.length === 0)
+                {
+                    code = "No edjes!";
+                    break;
+                }
+                code = "graph = {";
+                console.log(adjList);
+                for (let i = 0; i < adjList.length; i++){
+                    console.log("as");
+                    let key = adjList[i].id;
+                    let curArr = adjList[i].arr;
+                    code += `'${key}': {`
+                    curArr.forEach(el => {
+                        code += `'${el}': 1, `;
+                    });
+                    code = code.slice(0, -2) + "}, ";
+                }
+                code = code.slice(0, -2) + "}";
+                break;
+            
+            case "cpp":
+                code = "print('v')"
+                break;
+
+            case "rust":
+                code = "print('a')"
+                break;
+
+            case "java":
+                code = "print('s')"
+                break;
+
+            case "csharp":
+                code = "print('d')"
+                break;
+
+            default:
+                code = "Select language";
+                break;
+        }
+        return code;
+    }
+
     export function exportAdjList()
     {
         return inputEdges;
@@ -204,7 +270,6 @@
                     oldId = oldIds[i];
                     if (vertices.filter((x) => x.id === vertices[i].id).length > 1)
                     {
-                        console.log("ABA");
                         newIdIdx = i;   
                         areIdsSame = true;
                         break;

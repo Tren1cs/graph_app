@@ -18,12 +18,9 @@
 
     // Сделайте здесь экспорт в код, пожалуйста, в этом компоненте
     function generateCode(language: string ) {
-        if(language === "") {
-            return "Select language";
-        }
 
-        let code = "print('Hello World')";
-
+        let code = graphView.exportCode(language);
+        if (code === "Select language") return code;
         console.log(language)
 
         return hljs.highlight(code, {language: language, ignoreIllegals: true}).value;
