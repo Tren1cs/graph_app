@@ -7,6 +7,7 @@
     import Input from "$lib/components/ui/input/input.svelte";
 
     let innerHeight = $state(0);
+    let innerWidth = $state(0);
 
     
     let { oninvalidformat, oninvalidcode } = $props();
@@ -34,9 +35,25 @@
     let neworigin = $state({x: 0, y: 0});
     let position = $state({x: 0, y: 0});
     let isSelectedMoving = $state(false);
+    let radius = 30;
     let deletionQuery = $state([]);
 
-    $inspect(oldIds);
+    type GraphEvent = {
+        name: String,
+        mainVertexID: String,
+        affectedVerticiesIDs: String[],
+        affectedRebrsIDs: String[]
+    }
+    type GraphEventTree = {
+        Name: String,
+        Description: String,
+        Events: GraphEvent[]
+    }
+    let algo: GraphEventTree | undefined = $state()
+
+    //$inspect(origin);
+    $inspect(position);
+
     function unselect()
     {
         if (!isSelectedMoving)
@@ -58,7 +75,8 @@
             //console.log(position);
             //console.log(origin);
             selected.push(newVerticeId);
-            vertices.push({id: newVerticeId, x: (-position.x) + (origin.x) - 30, y: ((-position.y) + (origin.y) - innerHeight / 2 - 30)});
+            vertices.push({id: newVerticeId, x: -position.x + origin.x - radius,
+                                             y: -position.y + origin.y - radius});
         }
     }
 
@@ -407,8 +425,9 @@
     }
 
     function onpointermove(e:{ movementX: number; movementY: number; clientX:number; clientY:number; }) {
-        origin.x = e.clientX * (1/scale);
-        origin.y = e.clientY * (1/scale);
+        origin.x = (e.clientX - innerWidth/2) * (1/scale);
+        origin.y = (e.clientY - innerHeight/2) * (1/scale);
+        console.log(origin.x, origin.y)
         if((lmb == true || mmb == true) && mouseover) {
             position.x += e.movementX * (1/scale);
             position.y += e.movementY * (1/scale);
@@ -437,21 +456,23 @@
         if(mouseinview) {
             Zoom(1 + ( -2 * Number(e.deltaY > 0)));
         }
+        origin.x = (e.clientX - innerWidth/2) * (1/scale);
+        origin.y = (e.clientY - innerHeight/2) * (1/scale);
     }
 
     function Zoom(x:number) {
         scale += x * 0.06;
-        scale = Math.min(Math.max(0.16, scale), 1.9);//TODO: обновлять значение origina
+        scale = Math.min(Math.max(0.16, scale), 1.9);
     }
 
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
-<div ondblclick = {SpawnVertice} id="graphView" class=" overflow-hidden bg-transparent h-full w-full text-white top-0 left-0 text-center content-center z-10 absolute m-0"
+<div ondblclick = {SpawnVertice} id="graphView" class="overflow-hidden bg-transparent h-full w-full text-white top-0 left-0 text-center content-center z-10 absolute m-0 " 
     {onmousedown} {onmouseup} {onpointermove} {onmouseover} {onmouseout} {onwheel} {onmouseenter} {onmouseleave}>
 
-    <div class="relative" style="transform: scale({scale}); left: {(position.x * scale)}px; top: {(position.y * scale)}px; transform-origin: center;">
+    <div class="relative w-full h-0" style="transform: scale({scale}); left: {((position.x + innerWidth/2) * scale)}px; top: {((position.y) * scale)}px; transform-origin: center; ">
         {#each vertices as el, i (i)}
             <Vertice bind:deletionQuery = {deletionQuery} bind:vertice = {vertices[i]}
              bind:movingVertice = {isSelectedMoving} bind:selectedObjects = {selected}
@@ -471,4 +492,4 @@
     </div>
 </div>
 
-<svelte:window onkeydown = {hotkeyDownHandler} onkeyup = {hotkeyUpHandler} bind:innerHeight/>
+<svelte:window onkeydown = {hotkeyDownHandler} onkeyup = {hotkeyUpHandler} bind:innerHeight bind:innerWidth/>

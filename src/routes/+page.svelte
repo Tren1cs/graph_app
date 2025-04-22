@@ -9,6 +9,8 @@
     import * as Resizable from "$lib/components/ui/resizable";
     import { toast } from 'svelte-sonner';
     import { Toaster } from '$lib/components/ui/sonner';
+    import { Description } from '$lib/components/ui/alert-dialog';
+    import { List } from '$lib/components/ui/command';
 
     let settings = $state({
         GraphName: "Graph 1",
@@ -19,6 +21,7 @@
             directed: false
         }
     });
+
     let graphView = $state();
 
     let graphTextInput = $state("");
