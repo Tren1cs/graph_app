@@ -22,19 +22,6 @@
         }
     });
 
-    type GraphEvent = {
-        name: String,
-        mainVertexID: String,
-        affectedVerticiesIDs: String[],
-        affectedRebrsIDs: String[]
-    }
-    type GraphEventTree = {
-        Name: String,
-        Description: String,
-        Events: GraphEvent[]
-    }
-    let algo: GraphEventTree | undefined = $state()
-
     let graphView = $state();
 
     let graphTextInput = $state("");
