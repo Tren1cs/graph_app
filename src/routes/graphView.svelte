@@ -5,12 +5,13 @@
     import { onMount } from 'svelte';
     import { ZoomIn, ZoomOut } from "lucide-svelte";
     import Input from "$lib/components/ui/input/input.svelte";
+    import { type GraphEventTree } from "$lib/customTypes";
 
     let innerHeight = $state(0);
     let innerWidth = $state(0);
 
     
-    let { oninvalidformat, oninvalidcode } = $props();
+    let { oninvalidformat, oninvalidcode, algo = $bindable(undefined) } = $props();
     // TODO: Вызывать oninvalidcode() при ошибке парсинга кода
     let vertices:{id:string, x:number, y:number}[] = $state([]);
     let oldIds:string[] = $state([]);
@@ -27,18 +28,7 @@
     let radius = 30;
     let deletionQuery = $state([]);
 
-    type GraphEvent = {
-        name: String,
-        mainVertexID: String,
-        affectedVerticiesIDs: String[],
-        affectedRebrsIDs: String[]
-    }
-    type GraphEventTree = {
-        Name: String,
-        Description: String,
-        Events: GraphEvent[]
-    }
-    let algo: GraphEventTree | undefined = $state()
+    
 
     //$inspect(origin);
     $inspect(position);
