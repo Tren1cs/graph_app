@@ -178,7 +178,7 @@
 
     export function generateGraph()
     {
-        vertices = get_vertex_positions(inputEdges);
+        vertices = get_vertex_positions(inputEdges, -position.x, -position.y);
         let localOldIds:string[] = [];
         for (let i = 0; i < vertices.length; i++)
         {

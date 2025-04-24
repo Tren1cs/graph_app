@@ -32,7 +32,7 @@ function graph_alignment(graph: { [id: string] : Array<string>}, vertex_pos: { [
     return vertex_pos;
 }
 
-export function get_vertex_positions(rebrs: Array<Array<string>>){
+export function get_vertex_positions(rebrs: Array<Array<string>>, x: number, y: number){
 
     //*константы
 
@@ -40,8 +40,10 @@ export function get_vertex_positions(rebrs: Array<Array<string>>){
     const rebr_power: number = 1.1;            //? сила притяжения между вершинами ребра (distance ^ rebr_power)
     const vertex_power: number = 5000000;         //? сила отталкивания между двумя вершинами (vertex_power / distance)
     const move_distance: number = 0.0000001;   //? сила одного шага (... * move_distance)
-    const min_start_pos_range: number = 500;     //? минимальная стартовая координата вершины
-    const max_start_pos_range: number = 1000;  //? максимальная стартовая координата вершины
+    const min_x: number = x - 500;     //? минимальная стартовая координата вершины
+    const max_x: number = x + 500;  //? максимальная стартовая координата вершины
+    const min_y: number = y - 500;     //? минимальная стартовая координата вершины
+    const max_y: number = y + 500;  //? максимальная стартовая координата вершины
     const rebr_distance = 230;                 //? дистанция между рёбрами
 
     //* конвертация входных данных
@@ -64,7 +66,7 @@ export function get_vertex_positions(rebrs: Array<Array<string>>){
     
     let vertex_pos: { [id: string]: Array<number> } = {};
     for(let vertex in graph) {
-        vertex_pos[vertex] = [randomIntFromInterval(min_start_pos_range, max_start_pos_range), randomIntFromInterval(min_start_pos_range, max_start_pos_range)];
+        vertex_pos[vertex] = [randomIntFromInterval(min_x, max_x), randomIntFromInterval(min_y, max_y)];
     }
 
 

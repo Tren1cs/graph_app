@@ -24,7 +24,7 @@
                     <Tabs.List class="w-full">
                         <Tabs.Trigger value="code" class="w-full" onfocus={() => input_type = "code"}>Из  кода</Tabs.Trigger>
                         <Tabs.Trigger value="list" class="w-full" onfocus={() => input_type = "list"}>Из списка рёбер</Tabs.Trigger>
-                        <Tabs.Trigger value="matrix" class="w-full" onfocus={() => input_type = "matrix"}>Из списка смежности</Tabs.Trigger>
+                        <Tabs.Trigger value="matrix" class="w-full" onfocus={() => input_type = "matrix"}>Из матрицы смежности</Tabs.Trigger>
                     </Tabs.List>
 
                     <Tabs.Content value="code">
@@ -42,7 +42,7 @@
                         
                     <Tabs.Content value="list">
                         <script>input_type = "list"</script>
-                        <Textarea placeholder="🚧 В разработке! 🚧" class="mb-2 min-h-[128px]" bind:value={input}/>
+                        <Textarea placeholder="Вставьте список рёбер" class="mb-2 min-h-[128px]" bind:value={input}/>
                         <Dialog.Close on:click class="w-full ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center
                             whitespace-nowrap rounded-md text-sm font-medium transition-colors
                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
@@ -54,7 +54,7 @@
 
                     <Tabs.Content value="matrix">
                         <script>input_type = "list"</script>
-                        <Textarea placeholder="🚧 В разработке! 🚧" class="mb-2 min-h-[128px]" bind:value={input}/>
+                        <Textarea placeholder="Вставьте матрицу смежности" class="mb-2 min-h-[128px]" bind:value={input}/>
                         <Dialog.Close on:click class="w-full ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center
                             whitespace-nowrap rounded-md text-sm font-medium transition-colors
                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none
