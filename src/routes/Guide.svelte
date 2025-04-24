@@ -11,6 +11,8 @@
   import * as Tabs from "$lib/components/ui/tabs";
 
   import { Textarea } from "$lib/components/ui/textarea/index.js";
+
+//ТЕБЕ ЗДЕСЬ ЧЁРНЫМ ПО-БЕЛОМУ НАПИСАНО: ГАААААААААААААААЙДАААААААААА!
 </script>
 
 <Dialog.Root>
