@@ -2,7 +2,7 @@
     import Vertice from "./Vertice.svelte";
     import {get_vertex_positions} from "$lib/first";
     import Edge from "./Edge.svelte";
-    import { onMount } from 'svelte';
+    import { onMount, untrack } from 'svelte';
     import { ZoomIn, ZoomOut } from "lucide-svelte";
     import Input from "$lib/components/ui/input/input.svelte";
     import { type GraphEventTree } from "$lib/customTypes";
@@ -19,6 +19,17 @@
     let selected:string[] = $state([]);
     let inputEdges:string[][] = $state([]);
     let edgesMatrix:string = $state("");
+    const maxVertices = 1e5;
+    let uniqueVertices = $derived.by(() => 
+    {
+        let st = new Set();
+        for (let i = 0; i < vertices.length; i++)
+        {
+            st.add(vertices[i].id);
+        }
+        return st;
+    });
+    
 
     let scale = $state(1.0);
     let origin = $state({x: 0, y: 0});
@@ -33,6 +44,8 @@
     //$inspect(origin);
     $inspect(position);
 
+
+    $inspect(oldIds);
     function unselect()
     {
         if (!isSelectedMoving)
@@ -45,7 +58,12 @@
     {
         if (!isSelectedMoving)
         {
-            let newVerticeId = String(vertices.length + 1);
+            let newVerticeId = "";
+            for (let i = 0; i < maxVertices; i++)
+            {
+                newVerticeId = i.toString();
+                if (!uniqueVertices.has(newVerticeId)) break;
+            }
             //console.log(position);
             //console.log(origin);
             selected.push(newVerticeId);
@@ -186,6 +204,7 @@
         let oldId:string = "B1tzzzzz";
         let newIdIdx:number = -1;
         let areIdsSame:boolean = false;
+        
         if (vertices.length === oldIds.length)
         {
             for (let i = 0; i < vertices.length; i++)
@@ -193,6 +212,14 @@
                 if (vertices[i].id !== oldIds[i])
                 {
                     oldId = oldIds[i];
+                    if (vertices.filter((x) => x.id === vertices[i].id).length > 1)
+                    {
+                        console.log("ABA");
+                        newIdIdx = i;   
+                        areIdsSame = true;
+                        break;
+                    }
+
                     oldIds[i] = vertices[i].id;
                     newIdIdx = i;
                 }
@@ -202,48 +229,26 @@
         {
             oldId = "";
         } 
-        
-        if (oldId !== "B1tzzzzz")
+
+        if (areIdsSame) 
         {
-            if (vertices.length === oldIds.length)
-            {  
-                for (let i = 0; i < inputEdges.length; i++)
-                { 
-                    for (let j = 0; j < 2; j++)
-                    {
-                        if (inputEdges[i][j] === vertices[newIdIdx].id)
-                        {
-                            areIdsSame = true;
-                            break;
-                        }
-                    }
-
-                    if (areIdsSame) break;
-                }
+            vertices[newIdIdx].id = oldId;
+            oldIds[newIdIdx] = oldId;
+        }
+        
+        else if (oldId !== "B1tzzzzz")
+        {
+            oldIds = [];
+            for (let i = 0; i < vertices.length; i++)
+            {
+                oldIds.push(vertices[i].id);
             }
 
-            else
-            {
-                oldIds = [];
-                for (let i = 0; i < vertices.length; i++)
+            for (let i = 0; i < inputEdges.length; i++)
+            { 
+                for (let j = 0; j < 2; j++)
                 {
-                    oldIds.push(vertices[i].id);
-                }
-            }
-
-            if (areIdsSame) 
-            {
-                vertices[newIdIdx].id = oldId;
-                oldIds[newIdIdx] = oldId;
-            }
-            else
-            {
-                for (let i = 0; i < inputEdges.length; i++)
-                { 
-                    for (let j = 0; j < 2; j++)
-                    {
-                        if (inputEdges[i][j] === oldId) inputEdges[i][j] = vertices[newIdIdx].id;
-                    }
+                    if (inputEdges[i][j] === oldId) inputEdges[i][j] = vertices[newIdIdx].id;
                 }
             }
         }

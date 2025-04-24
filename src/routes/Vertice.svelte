@@ -30,7 +30,6 @@
 
 	$effect(() => 
 	{
-		
 		let Selected = selectedObjects.find(v => v === vertice.id)
 		if (Selected !== undefined)
 		{
