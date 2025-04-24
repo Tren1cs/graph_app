@@ -69,7 +69,7 @@
             onSelectedChange();
         }}>
         <Select.Trigger class="w-[462px] p-3 mb-2">
-            <Select.Value placeholder="Select language"/>
+            <Select.Value placeholder="Выберите язык"/>
         </Select.Trigger>
         <Select.Content>
             {#each langs as lang}

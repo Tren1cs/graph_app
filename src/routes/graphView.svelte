@@ -312,8 +312,6 @@
             $inspect(inputEdges);
             let firstEdge = inputEdges.find(v => v === selected.reverse());
             let secondEdge = inputEdges.find(v => v === selected.reverse());
-            console.log(firstEdge);
-            console.log(secondEdge);
             if (firstEdge === undefined && secondEdge == undefined && selected[0] != selected[1])
             {
                 inputEdges.push(selected);
@@ -322,7 +320,7 @@
             else
             {
                 $inspect(inputEdges);
-                console.log("YE");
+                //console.log("YE");
                 selected = [selected[0]];
             }   
         }
@@ -349,7 +347,6 @@
     function onpointermove(e:{ movementX: number; movementY: number; clientX:number; clientY:number; }) {
         origin.x = (e.clientX - innerWidth/2) * (1/scale);
         origin.y = (e.clientY - innerHeight/2) * (1/scale);
-        console.log(origin.x, origin.y)
         if((lmb == true || mmb == true) && mouseover) {
             position.x += e.movementX * (1/scale);
             position.y += e.movementY * (1/scale);

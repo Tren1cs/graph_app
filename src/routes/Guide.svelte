@@ -1,5 +1,7 @@
 <script lang="ts">
     import LanguageSelection from './LanguageSelection.svelte';
+    import * as Card from "$lib/components/ui/card/index.js";
+    import * as Carousel from "$lib/components/ui/carousel/index.js";
 
     import { buttonVariants } from "$lib/components/ui/button/index.js";
 
@@ -12,36 +14,74 @@
 </script>
 
 <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><InfoIcon class="mr-2 h-6 w-6"/>Guide</Dialog.Trigger>
+    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><InfoIcon class="mr-2 h-6 w-6"/>Гайд</Dialog.Trigger>
     <Dialog.Content>
         <Dialog.Header>
-            <Dialog.Title class="mb-4 text-4xl"  >Description</Dialog.Title>
-            <Dialog.Description class="text-xl">This is graph editor. You can import, export and edit graph here.</Dialog.Description>
-            <Dialog.Title class="mb-4 text-4xl" >Formats
-                <p></p>
-                <a href="https://en.wikipedia.org/wiki/Edge_list" class="text-2xl" style = "color: rgb(136, 162, 255);">Edge list</a>
-                <Dialog.Description class="text-xl" style = "">*Vertice A* *Vertice B*</Dialog.Description>
-                <Dialog.Description class="text-xl" style = "">...</Dialog.Description>
-                <Dialog.Description class="text-xl">*Vertice X* *Vertice Y*</Dialog.Description>
-                
-                <p></p>
-                <a href="https://en.wikipedia.org/wiki/Adjacency_matrix" class="text-2xl" style = "color: rgb(136, 162, 255);">Adjacency matrix</a>
-                <Dialog.Description class="text-xl">⠀⠀⠀*A*⠀*B*⠀*C* </Dialog.Description>
-                <Dialog.Description class="text-xl">*A*⠀⠀0⠀⠀1⠀⠀⠀0</Dialog.Description>
-                <Dialog.Description class="text-xl">*B*⠀⠀1⠀⠀0⠀⠀⠀1</Dialog.Description>
-                <Dialog.Description class="text-xl">*C*⠀⠀0⠀⠀1⠀⠀⠀0</Dialog.Description>
-                <Dialog.Description></Dialog.Description>
-            </Dialog.Title>
+            <Dialog.Title class="mb-4 text-xl"  >Гайд 📔</Dialog.Title>
+            <Carousel.Root class="w-full self-center mx-2">
+              <Carousel.Content>
+                  
+                  <Carousel.Item>
+                    <div class="p-1">
+                      <Card.Root>
+                        <Card.Content
+                          class=" bg-background border-border rounded-md aspect-[4/3] p-6"
+                        >
+                          <h1 class="text-xl mb-4">✏ Как пользоваться редактором ✏</h1>
+                          <div class="mb-2">
+                            На данный момент на сайте вы можете:
+                          </div>
+                              <ul>
+                                <li class="mb-1">- Создавать графы</li>
+                                <li class="mb-1">- Экспортировать графы в список рёбер</li>
+                                <li class="mb-1">- Импортировать из списка рёбер</li>
+                                <li class="mb-1">- Импортировать из матрицы смежности</li>
+                              </ul>
+                          <div class="mt-3">
+                            Далее в инструкции описаны горячие клавиши и форматы импорта / экспорта
+                          </div>
+                        </Card.Content>
+                      </Card.Root>
+                    </div>
+                  </Carousel.Item>
 
-            <Dialog.Title class="mb-4 text-4xl"  >Hotkeys</Dialog.Title>
-            <Dialog.Description class="text-xl">Left click on vertice - select vertice</Dialog.Description>
-            <Dialog.Description class="text-xl">Right click on vertice - delete vertice</Dialog.Description>
-            <Dialog.Description class="text-xl">Middle click/Left click on workspace and drag - move workspace</Dialog.Description>
-            <Dialog.Description class="text-xl">Left click on vertice and drag - move vertice</Dialog.Description>
-            <Dialog.Description class="text-xl">Left click on workspace and drag - move workspace</Dialog.Description>
-            <Dialog.Description class="text-xl">Double left click on workspace - spawn new vertice</Dialog.Description>
-            <Dialog.Description class="text-xl">Mouse wheel up/down - upscale/downscale workspace</Dialog.Description>
-            <Dialog.Description class="text-xl">Select vertice + Shift + Left click on another vertice - create edge</Dialog.Description>
+                  <Carousel.Item>
+                    <div class="p-1">
+                      <Card.Root>
+                        <Card.Content
+                          class=" bg-background border-border rounded-md aspect-[4/3] p-6"
+                        >
+                          <h1 class="text-xl mb-4">🔥 Куда тыкать 🔥</h1>
+                          <div>
+                            <ul>
+                              <li class="mb-2">Создать вершину - двойной щелчок ЛКМ</li>
+                              <li class="mb-2">Выделить вершину - ЛКМ</li>
+                              <li class="mb-2">Создать ребро - выделить 1 вершину + SHIFT + ЛКМ по другой</li>
+                              <li class="mb-2">Удалить вершину - ПКМ</li>
+                              <li class="mb-2">Можно двигать всё рабочее пространство, зажав ЛКМ</li>
+                            </ul>
+                          </div>
+                        </Card.Content>
+                      </Card.Root>
+                    </div>
+                  </Carousel.Item>
+                  <!--
+                  <Carousel.Item>
+                    <div class="p-1">
+                      <Card.Root>
+                        <Card.Content
+                          class=" bg-background border-border rounded-md aspect-[4/3] p-6"
+                        >
+                          <h1 class="text-xl mb-4">📦 Форматы данных 📦</h1>
+                        </Card.Content>
+                      </Card.Root>
+                    </div>
+                  </Carousel.Item>
+                -->
+              </Carousel.Content>
+              <Carousel.Previous class="-left-[4.5rem]"/>
+              <Carousel.Next class="-right-[4.5rem]"/>
+            </Carousel.Root>
         </Dialog.Header>
     </Dialog.Content>
 </Dialog.Root>

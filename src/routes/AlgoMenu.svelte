@@ -11,7 +11,7 @@
     import { Toaster } from '$lib/components/ui/sonner';
     import { Description } from '$lib/components/ui/alert-dialog';
     import { List } from '$lib/components/ui/command';
-    import GraphEventTree from './graphView.svelte'
+    import GraphEventTree from './graphView.svelte';
 
     let { algo } = $props();
 

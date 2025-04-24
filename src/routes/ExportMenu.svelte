@@ -13,16 +13,16 @@
 
     import hljs from 'highlight.js';
     let { graphView = $bindable() }= $props();
-    let edgematrix = $state("");
+    let edgematrix = $state("🚧 В разработке! 🚧");
     let exportType = "";
 
     // Сделайте здесь экспорт в код, пожалуйста, в этом компоненте
     function generateCode(language: string ) {
         if(language === "") {
-            return "Select language";
+            return "Выберите язык";
         }
 
-        let code = "print('Hello World')";
+        let code = "print('🚧 Under construction! 🚧')";
 
         console.log(language)
 
@@ -36,17 +36,17 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark-reasonable.css">
 <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><ArrowUpFromLine class="mr-2 h-6 w-6"/>Export</Dialog.Trigger>
+    <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + " mr-2"}><ArrowUpFromLine class="mr-2 h-6 w-6"/>Экспорт</Dialog.Trigger>
     <Dialog.Content>
         <Dialog.Header>
-            <Dialog.Title class="mb-4">Export Graph</Dialog.Title>
+            <Dialog.Title class="mb-4">Экспортировать граф</Dialog.Title>
 
             <Dialog.Description>
                 <Tabs.Root value="code" class="w-full min-h-[220px]">
                     <Tabs.List class="w-full">
-                        <Tabs.Trigger value="code" class="w-full" onfocus={() => exportType = "code"}>To code</Tabs.Trigger>
-                        <Tabs.Trigger value="list" class="w-full" onfocus={() => exportType = "list"}>To edge list</Tabs.Trigger>
-                        <Tabs.Trigger value="matrix" class="w-full" onfocus={() => exportType = "matrix"}>To adjacency matrix</Tabs.Trigger>
+                        <Tabs.Trigger value="code" class="w-full" onfocus={() => exportType = "code"}>В код</Tabs.Trigger>
+                        <Tabs.Trigger value="list" class="w-full" onfocus={() => exportType = "list"}>В список рёбер</Tabs.Trigger>
+                        <Tabs.Trigger value="matrix" class="w-full" onfocus={() => exportType = "matrix"}>В матрицу смежности</Tabs.Trigger>
                     </Tabs.List>
 
                     <Tabs.Content value="code">
